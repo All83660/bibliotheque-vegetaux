@@ -34,7 +34,7 @@
 <header>
   <h1>Bibliothèque de végétaux</h1>
   <div class="controls grow">
-    <input id="q" type="search" placeholder="Rechercher (nom ou taille)… ex. pinea, 20/25" />
+    <input id="q" type="search" placeholder="Rechercher (nom ou taille)… ex. pinus 20/25" />
   </div>
   <select id="sort">
     <option value="name-asc">Tri : Nom A→Z</option>
@@ -88,7 +88,7 @@ async function getImagesList(){
 // utils
 const normalize = s => (s||"").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/\s+/g," ").trim();
 
-// distance de Levenshtein (simple)
+// distance de Levenshtein
 function levenshtein(a, b) {
   const m = [];
   for(let i=0;i<=b.length;i++){m[i]=[i];}
@@ -170,14 +170,18 @@ function updateCounter(){
 
 function applySearch(q){
   const nq = normalize(q);
+  const terms = nq.split(" ").filter(Boolean); // multi-mots
   document.querySelectorAll("#grid .card").forEach(card=>{
     const hay = `${card.dataset.nom} ${card.dataset.taille} ${card.dataset.file}`;
-    let match = !nq || hay.includes(nq);
+    let match = true;
 
-    // si pas trouvé en "inclusion", tester tolérance (distance <= 2)
-    if(!match && nq){
-      const words = hay.split(" ");
-      match = words.some(w => levenshtein(nq, w) <= 2);
+    for (const term of terms){
+      let subMatch = hay.includes(term);
+      if(!subMatch){
+        const words = hay.split(" ");
+        subMatch = words.some(w => levenshtein(term, w) <= 2);
+      }
+      if(!subMatch){ match = false; break; }
     }
 
     card.hidden = !match;
