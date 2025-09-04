@@ -88,6 +88,22 @@ async function getImagesList(){
 // utils
 const normalize = s => (s||"").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/\s+/g," ").trim();
 
+// distance de Levenshtein (simple)
+function levenshtein(a, b) {
+  const m = [];
+  for(let i=0;i<=b.length;i++){m[i]=[i];}
+  for(let j=0;j<=a.length;j++){m[0][j]=j;}
+  for(let i=1;i<=b.length;i++){
+    for(let j=1;j<=a.length;j++){
+      m[i][j] = b.charAt(i-1)==a.charAt(j-1)
+        ? m[i-1][j-1]
+        : 1+Math.min(m[i-1][j-1],m[i][j-1],m[i-1][j]);
+    }
+  }
+  return m[b.length][a.length];
+}
+
+// parse nom
 function parseName(fileNameNoExt){
   const parts = fileNameNoExt.trim().split(" ");
   let taille = ""; const last = parts[parts.length-1] || "";
@@ -120,24 +136,10 @@ function makeCard(item){
     } catch { alert("Copie impossible. Lien :\n"+item.download_url); }
   };
 
-  const copyImg = document.createElement("button");
-  copyImg.textContent = "Copier image";
-  copyImg.onclick = async () => {
-    try {
-      const resp = await fetch(item.download_url);
-      const blob = await resp.blob();
-      await navigator.clipboard.write([ new ClipboardItem({ [blob.type]: blob }) ]);
-      copyImg.textContent = "Image copiée ✓"; setTimeout(()=>copyImg.textContent="Copier image",1200);
-    } catch {
-      alert("Votre navigateur ne permet pas la copie d’image.\nVous pouvez utiliser « Ouvrir » puis clic droit → Copier l’image.");
-    }
-  };
-
-  row.append(open, copy, copyImg);
+  row.append(open, copy);
   meta.append(title, subtitle, row);
   card.append(img, meta);
 
-  // données pour la recherche / tri
   card.dataset.nom = normalize(nomPlante || "");
   card.dataset.file = normalize(item.name);
   card.dataset.taille = normalize(taille || "");
@@ -153,7 +155,7 @@ function sortCards(mode){
   cards.sort((a,b)=>{
     const A = a.dataset.nom, B = b.dataset.nom;
     if (mode === "name-desc") return B.localeCompare(A);
-    return A.localeCompare(B); // name-asc par défaut
+    return A.localeCompare(B);
   });
   cards.forEach(c => GRID.appendChild(c));
 }
@@ -170,11 +172,17 @@ function applySearch(q){
   const nq = normalize(q);
   document.querySelectorAll("#grid .card").forEach(card=>{
     const hay = `${card.dataset.nom} ${card.dataset.taille} ${card.dataset.file}`;
-    const match = !nq || hay.includes(nq);
+    let match = !nq || hay.includes(nq);
+
+    // si pas trouvé en "inclusion", tester tolérance (distance <= 2)
+    if(!match && nq){
+      const words = hay.split(" ");
+      match = words.some(w => levenshtein(nq, w) <= 2);
+    }
+
     card.hidden = !match;
     card.style.display = match ? "" : "none";
   });
-  // état vide
   const anyVisible = document.querySelector("#grid .card:not([hidden])");
   STATUS.hidden = !!anyVisible;
   STATUS.className = "empty";
