@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Bibliothèque de végétaux</title>
+<style>
+  body{font-family:Arial,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;margin:0;background:#f7f7f7;color:#222}
+  header{position:sticky;top:0;background:#fff;border-bottom:1px solid #e5e5e5;padding:12px 16px;display:flex;gap:12px;align-items:center;z-index:10}
+  header h1{margin:0;font-size:18px;font-weight:600}
+  .grow{flex:1}
+  input[type="search"]{width:100%;padding:10px 12px;border:1px solid #ddd;border-radius:10px;font-size:14px}
+  .wrap{max-width:1200px;margin:16px auto;padding:0 16px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:14px}
+  .card{background:#fff;border:1px solid #e7e7e7;border-radius:14px;box-shadow:0 1px 2px rgba(0,0,0,.03);overflow:hidden;display:flex;flex-direction:column}
+  .thumb{aspect-ratio:1/1;width:100%;object-fit:cover;background:#fafafa}
+  .meta{padding:10px 12px;display:flex;flex-direction:column;gap:6px}
+  .title{font-size:14px;font-weight:600;line-height:1.2}
+  .subtitle{font-size:12px;color:#666}
+  .row{display:flex;gap:8px}
+  button{cursor:pointer;border:1px solid #ddd;background:#fff;border-radius:10px;padding:8px 10px;font-size:12px}
+  button:hover{background:#f3f3f3}
+  .count{font-size:12px;color:#666}
+  .pill{padding:6px 10px;border:1px solid #ddd;border-radius:999px;background:#fff}
+</style>
+</head>
+<body>
+<header>
+  <h1>Bibliothèque de végétaux</h1>
+  <div class="grow"><input id="q" type="search" placeholder="Rechercher (nom ou taille)… ex. pinea, 20/25" /></div>
+  <button id="refresh" title="Recharger la liste">Actualiser</button>
+  <span id="counter" class="pill count">0 élément</span>
+</header>
+<div class="wrap">
+  <div id="grid" class="grid"></div>
+</div>
+
+<script>
+// ====== CONFIG PERSONNALISÉE =================================================
+const GITHUB_OWNER = "All83660";     
+const GITHUB_REPO  = "bibliotheque-vegetaux"; 
+const IMAGES_PATH  = "photos";    
+const BRANCH       = "main";      
+// ============================================================================
+
+// utilitaires
+const normalize = s => (s||"").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/\s+/g," ").trim();
+
+function parseName(fileNameNoExt){
+  const parts = fileNameNoExt.trim().split(" ");
+  let taille = "";
+  const last = parts[parts.length-1] || "";
+  if (/^\d{1,3}[-_]\d{1,3}$/.test(last)) {
+    taille = last.replace("_","/").replace("-","/"); 
+    parts.pop();
+  }
+  return { nomPlante: parts.join(" "), taille };
+}
+
+async function listImages() {
+  const url = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${IMAGES_PATH}?ref=${BRANCH}`;
+  const resp = await fetch(url, { headers: { "Accept": "application/vnd.github+json" }});
+  if (!resp.ok) throw new Error("Impossible de charger la liste des images.");
+  const data = await resp.json();
+  return data.filter(it => it.type === "file" && /\.(jpe?g|png|webp)$/i.test(it.name));
+}
+
+function makeCard(item){
+  const nameNoExt = item.name.replace(/\.[^.]+$/,"");
+  const { nomPlante, taille } = parseName(nameNoExt);
+  const card = document.createElement("div");
+  card.className = "card";
+  const img = document.createElement("img");
+  img.className = "thumb";
+  img.loading = "lazy";
+  img.alt = nomPlante || item.name;
+  img.src = item.download_url; 
+  const meta = document.createElement("div");
+  meta.className = "meta";
+  const title = document.createElement("div");
+  title.className = "title";
+  title.textContent = nomPlante || nameNoExt;
+  const subtitle = document.createElement("div");
+  subtitle.className = "subtitle";
+  subtitle.textContent = taille || "—";
+  const row = document.createElement("div");
+  row.className = "row";
+  const open = document.createElement("button");
+  open.textContent = "Ouvrir";
+  open.onclick = () => window.open(item.download_url, "_blank");
+  const copy = document.createElement("button");
+  copy.textContent = "Copier lien";
+  copy.onclick = async () => {
+    try {
+      await navigator.clipboard.writeText(item.download_url);
+      copy.textContent = "Lien copié ✓";
+      setTimeout(()=>copy.textContent="Copier lien",1200);
+    } catch(e){ alert("Copie impossible. Lien :\n"+item.download_url); }
+  };
+  row.append(open, copy);
+  meta.append(title, subtitle, row);
+  card.append(img, meta);
+  card.dataset.nom = normalize(nomPlante || "");
+  card.dataset.file = normalize(item.name);
+  card.dataset.taille = normalize(taille || "");
+  return card;
+}
+
+let CACHE = [];
+
+async function render(){
+  const grid = document.getElementById("grid");
+  grid.innerHTML = "";
+  try{
+    if (!CACHE.length) CACHE = await listImages();
+    const cards = CACHE.map(makeCard);
+    cards.forEach(c => grid.appendChild(c));
+    updateCounter();
+  }catch(e){
+    grid.innerHTML = `<div style="padding:20px;color:#b00">Erreur: ${e.message}</div>`;
+  }
+}
+
+function updateCounter(){
+  const total = document.querySelectorAll("#grid .card").length;
+  const visible = document.querySelectorAll("#grid .card:not([hidden])").length;
+  const c = document.getElementById("counter");
+  c.textContent = (visible===total) ? `${total} élément${total>1?"s":""}` :
+                                   `${visible}/${total} visible${visible>1?"s":""}`;
+}
+
+function applySearch(q){
+  const nq = normalize(q);
+  const all = document.querySelectorAll("#grid .card");
+  all.forEach(card=>{
+    const hay = `${card.dataset.nom} ${card.dataset.taille} ${card.dataset.file}`;
+    card.hidden = nq && !hay.includes(nq);
+  });
+  updateCounter();
+}
+
+document.getElementById("q").addEventListener("input", e => applySearch(e.target.value));
+document.getElementById("refresh").addEventListener("click", async ()=>{ CACHE = []; await render(); });
+render();
+</script>
+</body>
+</html>
