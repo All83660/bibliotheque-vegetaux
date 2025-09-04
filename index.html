@@ -36,38 +36,59 @@
 </div>
 
 <script>
-// === CONFIG ===
-const GITHUB_OWNER = "All83660";
-const GITHUB_REPO  = "bibliotheque-vegetaux";
-const IMAGES_PATH  = "photos";
-const BRANCH       = "main";
+// ===== Auto-détection dépôt / branche / chemin =====
+const DETECT = (() => {
+  // Exemple d’URL Pages: https://all83660.github.io/bibliotheque-vegetaux/
+  const host = location.hostname.split(".")[0] || "";
+  const parts = location.pathname.replace(/^\/+/,"").split("/");
+  const owner = host.toLowerCase();
+  const repo  = (parts[0] || "").toLowerCase();
+  return { owner, repo };
+})();
 
-// Normalisation texte (pour recherche)
+async function tryFetchContents(path, branch){
+  const base = `https://api.github.com/repos/${DETECT.owner}/${DETECT.repo}/contents`;
+  const url  = path ? `${base}/${encodeURIComponent(path)}?ref=${branch}`
+                    : `${base}?ref=${branch}`;
+  const resp = await fetch(url, { headers: { "Accept": "application/vnd.github+json" }});
+  if (!resp.ok) return { ok:false, status:resp.status, url };
+  const data = await resp.json();
+  return { ok:true, data, url };
+}
+
+async function getImagesList(){
+  const branches = ["main","master"];
+  const paths    = ["photos",""]; // "" = racine
+  for (const br of branches){
+    for (const p of paths){
+      const res = await tryFetchContents(p, br);
+      if (res.ok){
+        return {
+          list: res.data.filter(it => it.type==="file" && /\.(jpe?g|png|webp)$/i.test(it.name)),
+          branch: br,
+          path: p
+        };
+      }
+    }
+  }
+  throw new Error("Impossible de charger la liste des images (vérifie que le dépôt contient des images).");
+}
+
+// utilitaires
 const normalize = s => (s||"").toLowerCase()
   .normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/\s+/g," ").trim();
 
-// Découper le nom en NomPlante + Taille
 function parseName(fileNameNoExt){
   const parts = fileNameNoExt.trim().split(" ");
   let taille = "";
   const last = parts[parts.length-1] || "";
-  if (/^\d{1,3}[-_]\d{1,3}$/.test(last)) {
+  if (/^\d{1,3}[-_]\d{1,3}$/i.test(last)) {
     taille = last.replace("_","/").replace("-","/");
     parts.pop();
   }
   return { nomPlante: parts.join(" "), taille };
 }
 
-// Charger la liste des images
-async function listImages() {
-  const url = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${IMAGES_PATH}?ref=${BRANCH}`;
-  const resp = await fetch(url);
-  if (!resp.ok) throw new Error("Impossible de charger la liste des images.");
-  const data = await resp.json();
-  return data.filter(it => it.type === "file" && /\.(jpe?g|png|webp)$/i.test(it.name));
-}
-
-// Créer une carte image
 function makeCard(item){
   const nameNoExt = item.name.replace(/\.[^.]+$/,"");
   const { nomPlante, taille } = parseName(nameNoExt);
@@ -96,9 +117,11 @@ function makeCard(item){
   copy.onclick = async () => {
     try {
       await navigator.clipboard.writeText(item.download_url);
-      copy.textContent = "Lien copié ✓";
+      copy.textContent = "Lien copié ✓"; 
       setTimeout(()=>copy.textContent="Copier lien",1200);
-    } catch(e){ alert("Copie impossible. Lien :\n"+item.download_url); }
+    } catch { 
+      alert("Copie impossible. Lien :\n"+item.download_url); 
+    }
   };
   row.append(open, copy);
   meta.append(title, subtitle, row);
@@ -115,7 +138,10 @@ async function render(){
   const grid = document.getElementById("grid");
   grid.innerHTML = "";
   try{
-    if (!CACHE.length) CACHE = await listImages();
+    if (!CACHE.length){
+      const { list } = await getImagesList();
+      CACHE = list;
+    }
     const cards = CACHE.map(makeCard);
     cards.forEach(c => grid.appendChild(c));
     updateCounter();
@@ -134,8 +160,7 @@ function updateCounter(){
 
 function applySearch(q){
   const nq = normalize(q);
-  const all = document.querySelectorAll("#grid .card");
-  all.forEach(card=>{
+  document.querySelectorAll("#grid .card").forEach(card=>{
     const hay = `${card.dataset.nom} ${card.dataset.taille} ${card.dataset.file}`;
     card.hidden = nq && !hay.includes(nq);
   });
