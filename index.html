@@ -13,6 +13,7 @@
   .wrap{max-width:1200px;margin:16px auto;padding:0 16px}
   .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:14px}
   .card{background:#fff;border:1px solid #e7e7e7;border-radius:14px;box-shadow:0 1px 2px rgba(0,0,0,.03);overflow:hidden;display:flex;flex-direction:column}
+  .card[hidden]{display:none !important;}
   .thumb{aspect-ratio:1/1;width:100%;object-fit:cover;background:#fafafa}
   .meta{padding:10px 12px;display:flex;flex-direction:column;gap:6px}
   .title{font-size:14px;font-weight:600;line-height:1.2}
@@ -29,6 +30,7 @@
   <h1>Bibliothèque de végétaux</h1>
   <div class="grow"><input id="q" type="search" placeholder="Rechercher (nom ou taille)… ex. pinea, 20/25" /></div>
   <button id="refresh" title="Recharger la liste">Actualiser</button>
+  <button id="reset" title="Effacer la recherche">Réinitialiser</button>
   <span id="counter" class="pill count">0 élément</span>
 </header>
 <div class="wrap">
@@ -38,7 +40,6 @@
 <script>
 // ===== Auto-détection dépôt / branche / chemin =====
 const DETECT = (() => {
-  // Exemple d’URL Pages: https://all83660.github.io/bibliotheque-vegetaux/
   const host = location.hostname.split(".")[0] || "";
   const parts = location.pathname.replace(/^\/+/,"").split("/");
   const owner = host.toLowerCase();
@@ -48,8 +49,7 @@ const DETECT = (() => {
 
 async function tryFetchContents(path, branch){
   const base = `https://api.github.com/repos/${DETECT.owner}/${DETECT.repo}/contents`;
-  const url  = path ? `${base}/${encodeURIComponent(path)}?ref=${branch}`
-                    : `${base}?ref=${branch}`;
+  const url  = path ? `${base}/${encodeURIComponent(path)}?ref=${branch}` : `${base}?ref=${branch}`;
   const resp = await fetch(url, { headers: { "Accept": "application/vnd.github+json" }});
   if (!resp.ok) return { ok:false, status:resp.status, url };
   const data = await resp.json();
@@ -65,8 +65,7 @@ async function getImagesList(){
       if (res.ok){
         return {
           list: res.data.filter(it => it.type==="file" && /\.(jpe?g|png|webp)$/i.test(it.name)),
-          branch: br,
-          path: p
+          branch: br, path: p
         };
       }
     }
@@ -74,101 +73,70 @@ async function getImagesList(){
   throw new Error("Impossible de charger la liste des images (vérifie que le dépôt contient des images).");
 }
 
-// utilitaires
-const normalize = s => (s||"").toLowerCase()
-  .normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/\s+/g," ").trim();
+// utils
+const normalize = s => (s||"").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/\s+/g," ").trim();
 
 function parseName(fileNameNoExt){
   const parts = fileNameNoExt.trim().split(" ");
-  let taille = "";
-  const last = parts[parts.length-1] || "";
-  if (/^\d{1,3}[-_]\d{1,3}$/i.test(last)) {
-    taille = last.replace("_","/").replace("-","/");
-    parts.pop();
-  }
+  let taille = ""; const last = parts[parts.length-1] || "";
+  if (/^\d{1,3}[-_]\d{1,3}$/i.test(last)) { taille = last.replace("_","/").replace("-","/"); parts.pop(); }
   return { nomPlante: parts.join(" "), taille };
 }
 
 function makeCard(item){
   const nameNoExt = item.name.replace(/\.[^.]+$/,"");
   const { nomPlante, taille } = parseName(nameNoExt);
-  const card = document.createElement("div");
-  card.className = "card";
-  const img = document.createElement("img");
-  img.className = "thumb";
-  img.loading = "lazy";
-  img.alt = nomPlante || item.name;
-  img.src = item.download_url;
-  const meta = document.createElement("div");
-  meta.className = "meta";
-  const title = document.createElement("div");
-  title.className = "title";
-  title.textContent = nomPlante || nameNoExt;
-  const subtitle = document.createElement("div");
-  subtitle.className = "subtitle";
-  subtitle.textContent = taille || "—";
-  const row = document.createElement("div");
-  row.className = "row";
-  const open = document.createElement("button");
-  open.textContent = "Ouvrir";
-  open.onclick = () => window.open(item.download_url, "_blank");
-  const copy = document.createElement("button");
-  copy.textContent = "Copier lien";
-  copy.onclick = async () => {
-    try {
-      await navigator.clipboard.writeText(item.download_url);
-      copy.textContent = "Lien copié ✓"; 
-      setTimeout(()=>copy.textContent="Copier lien",1200);
-    } catch { 
-      alert("Copie impossible. Lien :\n"+item.download_url); 
-    }
-  };
-  row.append(open, copy);
-  meta.append(title, subtitle, row);
+  const card = document.createElement("div"); card.className = "card";
+  const img = document.createElement("img"); img.className = "thumb"; img.loading = "lazy"; img.alt = nomPlante || item.name; img.src = item.download_url;
+  const meta = document.createElement("div"); meta.className = "meta";
+  const title = document.createElement("div"); title.className = "title"; title.textContent = nomPlante || nameNoExt;
+  const subtitle = document.createElement("div"); subtitle.className = "subtitle"; subtitle.textContent = taille || "—";
+  const row = document.createElement("div"); row.className = "row";
+  const open = document.createElement("button"); open.textContent = "Ouvrir"; open.onclick = () => window.open(item.download_url, "_blank");
+  const copy = document.createElement("button"); copy.textContent = "Copier lien";
+  copy.onclick = async () => { try { await navigator.clipboard.writeText(item.download_url); copy.textContent = "Lien copié ✓"; setTimeout(()=>copy.textContent="Copier lien",1200);} catch { alert("Copie impossible. Lien :\n"+item.download_url);} };
+  row.append(open, copy); meta.append(title, subtitle, row);
   card.append(img, meta);
-  card.dataset.nom = normalize(nomPlante || "");
-  card.dataset.file = normalize(item.name);
-  card.dataset.taille = normalize(taille || "");
+  card.dataset.nom = normalize(nomPlante || ""); card.dataset.file = normalize(item.name); card.dataset.taille = normalize(taille || "");
   return card;
 }
 
 let CACHE = [];
 
 async function render(){
-  const grid = document.getElementById("grid");
-  grid.innerHTML = "";
+  const grid = document.getElementById("grid"); grid.innerHTML = "";
   try{
-    if (!CACHE.length){
-      const { list } = await getImagesList();
-      CACHE = list;
-    }
-    const cards = CACHE.map(makeCard);
-    cards.forEach(c => grid.appendChild(c));
+    if (!CACHE.length){ const { list } = await getImagesList(); CACHE = list; }
+    const cards = CACHE.map(makeCard); cards.forEach(c => grid.appendChild(c));
     updateCounter();
-  }catch(e){
-    grid.innerHTML = `<div style="padding:20px;color:#b00">Erreur: ${e.message}</div>`;
-  }
+  }catch(e){ grid.innerHTML = `<div style="padding:20px;color:#b00">Erreur: ${e.message}</div>`; }
 }
 
 function updateCounter(){
   const total = document.querySelectorAll("#grid .card").length;
   const visible = document.querySelectorAll("#grid .card:not([hidden])").length;
-  const c = document.getElementById("counter");
-  c.textContent = (visible===total) ? `${total} élément${total>1?"s":""}` :
-                                   `${visible}/${total} visible${visible>1?"s":""}`;
+  document.getElementById("counter").textContent = (visible===total) ? `${total} élément${total>1?"s":""}` : `${visible}/${total} visible${visible>1?"s":""}`;
 }
 
 function applySearch(q){
   const nq = normalize(q);
   document.querySelectorAll("#grid .card").forEach(card=>{
     const hay = `${card.dataset.nom} ${card.dataset.taille} ${card.dataset.file}`;
-    card.hidden = nq && !hay.includes(nq);
+    const match = !nq || hay.includes(nq);
+    card.hidden = !match;
+    card.style.display = match ? "" : "none"; // fallback
   });
   updateCounter();
 }
 
-document.getElementById("q").addEventListener("input", e => applySearch(e.target.value));
-document.getElementById("refresh").addEventListener("click", async ()=>{ CACHE = []; await render(); });
+// Événements
+const input = document.getElementById("q");
+input.addEventListener("input", e => applySearch(e.target.value));
+input.addEventListener("keydown", e => { if (e.key === "Enter"){ e.preventDefault(); applySearch(input.value); input.blur(); }});
+document.getElementById("refresh").addEventListener("click", async ()=>{ CACHE = []; await render(); applySearch(input.value); });
+document.getElementById("reset").addEventListener("click", ()=>{ input.value = ""; applySearch(""); input.focus(); });
+
+// Premier rendu
 render();
 </script>
 </body>
