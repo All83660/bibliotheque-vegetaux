@@ -1,234 +1,194 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Bibliothèque de végétaux</title>
-<style>
-  :root{--bg:#f7f7f7;--fg:#222;--card:#fff;--border:#e5e5e5;--muted:#666}
-  body{font-family:Arial,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;margin:0;background:var(--bg);color:var(--fg)}
-  header{position:sticky;top:0;background:#fff;border-bottom:1px solid var(--border);padding:12px 16px;display:flex;gap:12px;align-items:center;z-index:10;flex-wrap:wrap}
-  header h1{margin:0;font-size:18px;font-weight:600}
-  .grow{flex:1;min-width:240px}
-  input[type="search"], select{width:100%;padding:10px 12px;border:1px solid #ddd;border-radius:10px;font-size:14px;background:#fff}
-  .wrap{max-width:1200px;margin:16px auto;padding:0 16px}
-  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:14px}
-  .card{background:var(--card);border:1px solid #e7e7e7;border-radius:14px;box-shadow:0 1px 2px rgba(0,0,0,.03);overflow:hidden;display:flex;flex-direction:column}
-  .card[hidden]{display:none !important;}
-  .thumb{aspect-ratio:1/1;width:100%;object-fit:cover;background:#fafafa}
-  .meta{padding:10px 12px;display:flex;flex-direction:column;gap:6px}
-  .title{font-size:14px;font-weight:600;line-height:1.2}
-  .subtitle{font-size:12px;color:var(--muted)}
-  .row{display:flex;gap:8px;flex-wrap:wrap}
-  button{cursor:pointer;border:1px solid #ddd;background:#fff;border-radius:10px;padding:8px 10px;font-size:12px}
-  button:hover{background:#f3f3f3}
-  .count{font-size:12px;color:var(--muted)}
-  .pill{padding:6px 10px;border:1px solid #ddd;border-radius:999px;background:#fff}
-  .empty{padding:24px;color:#b00}
-  .loader{padding:24px;color:#666}
-  .controls{display:flex;gap:12px;align-items:center}
-  .controls .grow{min-width:280px}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bibliothèque de végétaux</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f7f7f7;
+    }
+    header {
+      background: #2d6a4f;
+      color: white;
+      padding: 15px;
+      text-align: center;
+      font-size: 22px;
+      font-weight: bold;
+    }
+    .controls {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      padding: 15px;
+    }
+    .controls input {
+      flex: 1;
+      padding: 10px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+    .controls button {
+      padding: 10px 14px;
+      background: #2d6a4f;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .controls button:hover {
+      background: #1b4332;
+    }
+    #counter {
+      font-size: 14px;
+      color: #444;
+    }
+    #grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 18px;
+      padding: 20px;
+    }
+    .card {
+      background: white;
+      border-radius: 8px;
+      padding: 12px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+    .card img {
+      max-width: 100%;
+      height: 200px;
+      object-fit: cover;
+      border-radius: 6px;
+      margin-bottom: 10px;
+    }
+    .card h3 {
+      margin: 5px 0;
+      font-size: 16px;
+    }
+    .card p {
+      margin: 0;
+      font-size: 14px;
+      color: #666;
+    }
+    .buttons {
+      margin-top: 10px;
+      display: flex;
+      gap: 8px;
+    }
+    .buttons button {
+      padding: 6px 10px;
+      font-size: 14px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .open {
+      background: #0077b6;
+      color: white;
+    }
+    .copy {
+      background: #90be6d;
+      color: white;
+    }
+    .download {
+      background: #ffb703;
+      color: white;
+    }
+    .open:hover { background: #023e8a; }
+    .copy:hover { background: #588157; }
+    .download:hover { background: #fb8500; }
+  </style>
 </head>
 <body>
-<header>
-  <h1>Bibliothèque de végétaux</h1>
-  <div class="controls grow">
-    <input id="q" type="search" placeholder="Rechercher (nom ou taille)… ex. pinus 20/25" />
+  <header>Bibliothèque de végétaux</header>
+  <div class="controls">
+    <input id="q" type="text" placeholder="Rechercher un végétal...">
+    <button id="refresh">Actualiser</button>
+    <span id="counter"></span>
   </div>
-  <select id="sort">
-    <option value="name-asc">Tri : Nom A→Z</option>
-    <option value="name-desc">Tri : Nom Z→A</option>
-  </select>
-  <button id="refresh" title="Recharger la liste">Actualiser</button>
-  <button id="reset" title="Effacer la recherche">Réinitialiser</button>
-  <span id="counter" class="pill count">0 élément</span>
-</header>
-<div class="wrap">
-  <div id="status" class="loader">Chargement…</div>
-  <div id="grid" class="grid" hidden></div>
-</div>
+  <div id="grid"></div>
 
-<script>
-// ===== Auto-détection dépôt / branche / chemin =====
-const DETECT = (() => {
-  const host = location.hostname.split(".")[0] || "";
-  const parts = location.pathname.replace(/^\/+/,"").split("/");
-  const owner = host.toLowerCase();
-  const repo  = (parts[0] || "").toLowerCase();
-  return { owner, repo };
-})();
+  <script>
+    const GRID = document.getElementById("grid");
 
-async function tryFetchContents(path, branch){
-  const base = `https://api.github.com/repos/${DETECT.owner}/${DETECT.repo}/contents`;
-  const url  = path ? `${base}/${encodeURIComponent(path)}?ref=${branch}` : `${base}?ref=${branch}`;
-  const resp = await fetch(url, { headers: { "Accept": "application/vnd.github+json" }});
-  if (!resp.ok) return { ok:false, status:resp.status, url };
-  const data = await resp.json();
-  return { ok:true, data, url };
-}
+    async function listImages() {
+      const res = await fetch("https://api.github.com/repos/All83660/bibliotheque-vegetaux/contents/photos");
+      if (!res.ok) throw new Error("Impossible de charger la liste des images.");
+      return await res.json();
+    }
 
-async function getImagesList(){
-  const branches = ["main","master"];
-  const paths    = ["photos",""]; // "" = racine
-  for (const br of branches){
-    for (const p of paths){
-      const res = await tryFetchContents(p, br);
-      if (res.ok){
-        return {
-          list: res.data.filter(it => it.type==="file" && /\.(jpe?g|png|webp)$/i.test(it.name)),
-          branch: br, path: p
-        };
+    function makeCard(file) {
+      const [nom, taille] = file.name.replace(/\.[^/.]+$/, "").split(/ (?=\d)/);
+      const div = document.createElement("div");
+      div.className = "card";
+      div.dataset.nom = nom.toLowerCase();
+      div.dataset.taille = taille || "";
+      div.dataset.file = file.download_url;
+
+      div.innerHTML = `
+        <img src="${file.download_url}" alt="${file.name}">
+        <h3>${nom}</h3>
+        <p>${taille || ""}</p>
+        <div class="buttons">
+          <button class="open" onclick="window.open('${file.download_url}','_blank')">Ouvrir</button>
+          <button class="copy" onclick="navigator.clipboard.writeText('${file.download_url}')">Copier lien</button>
+          <a href="${file.download_url}" download>
+            <button class="download">Télécharger</button>
+          </a>
+        </div>
+      `;
+      return div;
+    }
+
+    function normalize(str) {
+      return str.toLowerCase()
+                .normalize("NFD")
+                .replace(/[\u0300-\u036f]/g, "")
+                .replace(/[^a-z0-9]/g, "");
+    }
+
+    function applySearch(q) {
+      const nq = normalize(q);
+      const all = document.querySelectorAll("#grid .card");
+      let visible = 0;
+      all.forEach(card => {
+        const hay = normalize(card.dataset.nom + " " + card.dataset.taille);
+        const show = hay.includes(nq);
+        card.hidden = !show;
+        if (show) visible++;
+      });
+      updateCounter(visible, all.length);
+    }
+
+    function updateCounter(visible, total) {
+      document.getElementById("counter").textContent = `${visible}/${total} visibles`;
+    }
+
+    async function render() {
+      GRID.innerHTML = "";
+      try {
+        const files = await listImages();
+        const imgs = files.filter(f => f.type === "file" && /\.(jpg|jpeg|png|gif)$/i.test(f.name));
+        imgs.forEach(f => GRID.appendChild(makeCard(f)));
+        updateCounter(imgs.length, imgs.length);
+      } catch (e) {
+        GRID.innerHTML = `<div style="padding:20px;color:#b00">Erreur: ${e.message}</div>`;
       }
     }
-  }
-  throw new Error("Impossible de charger la liste des images (vérifie que le dépôt contient des images).");
-}
 
-// utils
-const normalize = s => (s||"").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/\s+/g," ").trim();
+    document.getElementById("q").addEventListener("input", e => applySearch(e.target.value));
+    document.getElementById("refresh").addEventListener("click", render);
 
-// distance de Levenshtein
-function levenshtein(a, b) {
-  const m = [];
-  for(let i=0;i<=b.length;i++){m[i]=[i];}
-  for(let j=0;j<=a.length;j++){m[0][j]=j;}
-  for(let i=1;i<=b.length;i++){
-    for(let j=1;j<=a.length;j++){
-      m[i][j] = b.charAt(i-1)==a.charAt(j-1)
-        ? m[i-1][j-1]
-        : 1+Math.min(m[i-1][j-1],m[i][j-1],m[i-1][j]);
-    }
-  }
-  return m[b.length][a.length];
-}
-
-// parse nom
-function parseName(fileNameNoExt){
-  const parts = fileNameNoExt.trim().split(" ");
-  let taille = ""; const last = parts[parts.length-1] || "";
-  if (/^\d{1,3}[-_]\d{1,3}$/i.test(last)) { taille = last.replace("_","/").replace("-","/"); parts.pop(); }
-  return { nomPlante: parts.join(" "), taille };
-}
-
-function makeCard(item){
-  const nameNoExt = item.name.replace(/\.[^.]+$/,"");
-  const { nomPlante, taille } = parseName(nameNoExt);
-
-  const card = document.createElement("div"); card.className = "card";
-  const img = document.createElement("img"); img.className = "thumb"; img.loading = "lazy"; img.alt = nomPlante || item.name; img.src = item.download_url;
-
-  const meta = document.createElement("div"); meta.className = "meta";
-  const title = document.createElement("div"); title.className = "title"; title.textContent = nomPlante || nameNoExt;
-  const subtitle = document.createElement("div"); subtitle.className = "subtitle"; subtitle.textContent = taille || "—";
-
-  const row = document.createElement("div"); row.className = "row";
-
-  const open = document.createElement("button");
-  open.textContent = "Ouvrir";
-  open.onclick = () => window.open(item.download_url, "_blank");
-
-  const copy = document.createElement("button");
-  copy.textContent = "Copier lien";
-  copy.onclick = async () => {
-    try { await navigator.clipboard.writeText(item.download_url);
-      copy.textContent = "Lien copié ✓"; setTimeout(()=>copy.textContent="Copier lien",1200);
-    } catch { alert("Copie impossible. Lien :\n"+item.download_url); }
-  };
-
-  row.append(open, copy);
-  meta.append(title, subtitle, row);
-  card.append(img, meta);
-
-  card.dataset.nom = normalize(nomPlante || "");
-  card.dataset.file = normalize(item.name);
-  card.dataset.taille = normalize(taille || "");
-
-  return card;
-}
-
-let CACHE = [];
-let GRID, STATUS, INPUT, SORT;
-
-function sortCards(mode){
-  const cards = Array.from(GRID.children);
-  cards.sort((a,b)=>{
-    const A = a.dataset.nom, B = b.dataset.nom;
-    if (mode === "name-desc") return B.localeCompare(A);
-    return A.localeCompare(B);
-  });
-  cards.forEach(c => GRID.appendChild(c));
-}
-
-function updateCounter(){
-  const total = document.querySelectorAll("#grid .card").length;
-  const visible = document.querySelectorAll("#grid .card:not([hidden])").length;
-  document.getElementById("counter").textContent =
-    (visible===total) ? `${total} élément${total>1?"s":""}` :
-                        `${visible}/${total} visible${visible>1?"s":""}`;
-}
-
-function applySearch(q){
-  const nq = normalize(q);
-  const terms = nq.split(" ").filter(Boolean); // multi-mots
-  document.querySelectorAll("#grid .card").forEach(card=>{
-    const hay = `${card.dataset.nom} ${card.dataset.taille} ${card.dataset.file}`;
-    let match = true;
-
-    for (const term of terms){
-      let subMatch = hay.includes(term);
-      if(!subMatch){
-        const words = hay.split(" ");
-        subMatch = words.some(w => levenshtein(term, w) <= 2);
-      }
-      if(!subMatch){ match = false; break; }
-    }
-
-    card.hidden = !match;
-    card.style.display = match ? "" : "none";
-  });
-  const anyVisible = document.querySelector("#grid .card:not([hidden])");
-  STATUS.hidden = !!anyVisible;
-  STATUS.className = "empty";
-  STATUS.textContent = anyVisible ? "" : "Aucun résultat pour votre recherche.";
-  updateCounter();
-}
-
-async function render(){
-  GRID.hidden = true;
-  STATUS.hidden = false; STATUS.className = "loader"; STATUS.textContent = "Chargement…";
-  GRID.innerHTML = "";
-  try{
-    if (!CACHE.length){
-      const { list } = await getImagesList();
-      CACHE = list;
-    }
-    const cards = CACHE.map(makeCard);
-    cards.forEach(c => GRID.appendChild(c));
-    sortCards(SORT.value);
-    STATUS.hidden = true; GRID.hidden = false;
-    updateCounter();
-  }catch(e){
-    GRID.hidden = true; STATUS.hidden = false; STATUS.className = "empty";
-    STATUS.textContent = `Erreur: ${e.message}`;
-  }
-}
-
-// Événements
-document.addEventListener("DOMContentLoaded", ()=>{
-  GRID   = document.getElementById("grid");
-  STATUS = document.getElementById("status");
-  INPUT  = document.getElementById("q");
-  SORT   = document.getElementById("sort");
-
-  INPUT.addEventListener("input", e => applySearch(e.target.value));
-  INPUT.addEventListener("keydown", e => { if (e.key === "Enter"){ e.preventDefault(); applySearch(INPUT.value); INPUT.blur(); }});
-  document.getElementById("refresh").addEventListener("click", async ()=>{ CACHE = []; await render(); applySearch(INPUT.value); });
-  document.getElementById("reset").addEventListener("click", ()=>{ INPUT.value = ""; applySearch(""); INPUT.focus(); });
-  SORT.addEventListener("change", ()=> sortCards(SORT.value));
-
-  render();
-});
-</script>
+    render();
+  </script>
 </body>
 </html>
