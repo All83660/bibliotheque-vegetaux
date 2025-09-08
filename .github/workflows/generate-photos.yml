@@ -1,0 +1,29 @@
+name: Build photos.json
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'photos/**'
+      - '.github/workflows/generate-photos.yml'
+      - 'scripts/build-photos.js'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Generate photos.json
+        run: node scripts/build-photos.js
+
+      - name: Commit photos.json
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "Auto: mise à jour photos.json"
+          file_pattern: photos.json
