@@ -12,102 +12,96 @@
   .grow{flex:1;min-width:240px}
   input[type="search"]{width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:8px;font-size:14px;background:#fff}
   .wrap{max-width:1200px;margin:16px auto;padding:0 16px}
-  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px}
-  .card{background:#fff;border:1px solid var(--border);border-radius:10px;box-shadow:0 1px 2px rgba(0,0,0,.03);overflow:hidden;display:flex;flex-direction:column}
-  .thumb{aspect-ratio:1/1;width:100%;object-fit:cover;background:#fafafa}
-  .meta{padding:10px 12px;display:flex;flex-direction:column;gap:6px}
-  .title{font-size:14px;font-weight:600;line-height:1.2}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px}
+  .card{background:#fff;border:1px solid var(--border);border-radius:8px;box-shadow:0 1px 2px rgba(0,0,0,.05);overflow:hidden;display:flex;flex-direction:column}
+  .card img{width:100%;height:180px;object-fit:cover;background:#fafafa}
+  .meta{padding:10px;display:flex;flex-direction:column;gap:6px;flex:1}
+  .title{font-weight:600;font-size:14px}
   .subtitle{font-size:12px;color:var(--muted)}
-  .row{display:flex;gap:6px;flex-wrap:wrap}
-  .btn{background:#fff;border:1px solid #ddd;border-radius:8px;padding:6px 10px;font-size:12px;cursor:pointer}
-  .btn:hover{background:#f3f3f3}
-  #counter{font-size:12px;color:var(--muted)}
+  .row{display:flex;gap:8px;flex-wrap:wrap;margin-top:auto}
+  .btn{flex:1;padding:6px 8px;border:1px solid var(--border);border-radius:6px;background:#fafafa;font-size:12px;cursor:pointer}
+  .btn:hover{background:#eee}
+  #error{color:#b00;padding:16px}
+  #counter{font-size:12px;color:var(--muted);margin-top:8px}
 </style>
 </head>
 <body>
 <header>
   <h1>Bibliothèque de végétaux</h1>
   <div class="grow"><input id="q" type="search" placeholder="Rechercher..."></div>
-  <div id="counter"></div>
-  <button id="refresh" class="btn">Actualiser</button>
-  <button id="reset" class="btn">Réinitialiser</button>
+  <button class="btn" id="refresh">Actualiser</button>
+  <button class="btn" id="reset">Réinitialiser</button>
 </header>
+
 <div class="wrap">
+  <div id="error"></div>
   <div id="grid" class="grid"></div>
+  <div id="counter"></div>
 </div>
 
 <script>
-/* --------- CONFIG --------- */
-const REPO = "All83660/bibliotheque-vegetaux";
-const PATH = "photos"; // dossier d’images
-/* -------------------------- */
+/* ===== Config dépôt ===== */
+const OWNER  = "All83660";
+const REPO   = "bibliotheque-vegetaux";
+const BRANCH = "main";
+const FOLDER = "photos"; // ton dossier d'images
+/* ======================== */
 
-let CACHE = [];
+/* On passe par l’API jsDelivr (pas de rate limit bloquante) */
+async function listImagesViaJsDelivr() {
+  // Liste les fichiers dans /photos
+  const url = `https://data.jsdelivr.com/v1/package/gh/${OWNER}/${REPO}@${BRANCH}/files/${FOLDER}`;
+  const r = await fetch(url, { cache: "no-store" });
+  if (!r.ok) throw new Error("jsDelivr n'a pas pu lister les fichiers (" + r.status + ")");
+  const data = await r.json();
+  const items = Array.isArray(data) ? data : (data.files || []);
+  // Ne garder que les fichiers images à la racine de /photos
+  return items
+    .filter(x => x.type === "file" && /\.(jpe?g|png|gif|webp)$/i.test(x.name))
+    .map(x => ({
+      name: x.name,
+      // URL CDN pour afficher/télécharger le fichier
+      url: `https://cdn.jsdelivr.net/gh/${OWNER}/${REPO}@${BRANCH}/${FOLDER}/${encodeURIComponent(x.name)}`
+    }));
+}
+
+/* ----------- UI / rendu ----------- */
+const GRID = document.getElementById("grid");
+const ERR  = document.getElementById("error");
+const Q    = document.getElementById("q");
+const COUNTER = document.getElementById("counter");
+let ALL = [];
 
 function normalize(str){
   return str.toLowerCase()
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g,"")
+    .normalize("NFD").replace(/[\u0300-\u036f]/g,"")
     .replace(/[^a-z0-9]/g,"");
 }
 
-async function listImages(){
-  const url = `https://api.github.com/repos/${REPO}/contents/${PATH}`;
-  const r = await fetch(url, {
-    headers:{ "Accept":"application/vnd.github+json" },
-    cache:"no-store"
-  });
-  if(!r.ok) throw new Error("Impossible de charger la liste des images");
-  return r.json();
-}
-
-function cardDOM(file){
-  const div = document.createElement("div");
-  div.className = "card";
-  div.dataset.nom = file.name.replace(/\.[^.]+$/,"").toLowerCase();
-
-  const img = document.createElement("img");
-  img.className = "thumb";
-  img.src = file.download_url;
-  img.alt = "";
-
-  const meta = document.createElement("div");
-  meta.className = "meta";
-
-  const title = document.createElement("div");
-  title.className = "title";
-  title.textContent = file.name.replace(/\.[^.]+$/,"");
-
-  const row = document.createElement("div");
-  row.className = "row";
-
-  const open = document.createElement("a");
-  open.className = "btn";
-  open.textContent = "Ouvrir";
-  open.href = file.download_url;
-  open.target = "_blank";
-  open.rel = "noreferrer";
-
-  const copy = document.createElement("button");
-  copy.className = "btn";
-  copy.textContent = "Copier lien";
-  copy.addEventListener("click", () =>
-    navigator.clipboard.writeText(file.download_url)
+function makeCard(item){
+  const card = document.createElement("div");
+  card.className = "card";
+  card.dataset.nom = item.name.replace(/\.[^.]+$/,"").toLowerCase();
+  card.innerHTML = `
+    <img src="${item.url}" alt="">
+    <div class="meta">
+      <div class="title">${item.name.replace(/\.[^.]+$/,"")}</div>
+      <div class="row">
+        <a class="btn" href="${item.url}" target="_blank" rel="noreferrer">Ouvrir</a>
+        <button class="btn copy">Copier lien</button>
+        <button class="btn dl">Télécharger</button>
+      </div>
+    </div>`;
+  // copier / télécharger (sans inline JS pour éviter les soucis d'apostrophes)
+  card.querySelector(".copy").addEventListener("click", () =>
+    navigator.clipboard.writeText(item.url)
   );
-
-  const dl = document.createElement("button");
-  dl.className = "btn";
-  dl.textContent = "Télécharger";
-  dl.addEventListener("click", () => telechargerImage(file.download_url, file.name));
-
-  row.append(open, copy, dl);
-  meta.append(title, row);
-  div.append(img, meta);
-  return div;
+  card.querySelector(".dl").addEventListener("click", () => downloadFile(item.url, item.name));
+  return card;
 }
 
-async function telechargerImage(url, filename){
-  const res = await fetch(url, { cache:"no-store" });
+async function downloadFile(url, filename){
+  const res = await fetch(url, { cache: "no-store" });
   const blob = await res.blob();
   const a = document.createElement("a");
   a.href = URL.createObjectURL(blob);
@@ -115,42 +109,38 @@ async function telechargerImage(url, filename){
   document.body.appendChild(a);
   a.click();
   a.remove();
-  setTimeout(()=>URL.revokeObjectURL(a.href),1500);
+  setTimeout(()=>URL.revokeObjectURL(a.href), 1500);
 }
 
-function applySearch(q){
-  const nq = normalize(q);
+function applySearch(){
+  const nq = normalize(Q.value);
+  let visible = 0;
   document.querySelectorAll("#grid .card").forEach(c=>{
-    c.hidden = !normalize(c.dataset.nom).includes(nq);
+    const show = normalize(c.dataset.nom).includes(nq);
+    c.hidden = !show;
+    if (show) visible++;
   });
-  updateCounter();
-}
-
-function updateCounter(){
-  const all = document.querySelectorAll("#grid .card").length;
-  const vis = document.querySelectorAll("#grid .card:not([hidden])").length;
-  document.getElementById("counter").textContent = `${vis}/${all} visibles`;
+  COUNTER.textContent = `${visible}/${ALL.length} visibles`;
 }
 
 async function render(){
-  const grid = document.getElementById("grid");
-  grid.textContent = "Chargement…";
-  try{
-    CACHE = await listImages();
-    grid.innerHTML = "";
-    CACHE.filter(f=>f.type==="file").forEach(f=>grid.appendChild(cardDOM(f)));
-    updateCounter();
-  }catch(e){
-    grid.innerHTML = `<div style="padding:20px;color:#b00">Erreur: ${e.message}</div>`;
+  GRID.textContent = "Chargement…";
+  ERR.textContent = "";
+  try {
+    ALL = await listImagesViaJsDelivr();
+    GRID.innerHTML = "";
+    ALL.forEach(it => GRID.appendChild(makeCard(it)));
+    applySearch();
+  } catch (e) {
+    GRID.innerHTML = "";
+    ERR.textContent = "Erreur: " + e.message;
   }
 }
 
 /* événements */
-document.getElementById("q").addEventListener("input", e=>applySearch(e.target.value));
+Q.addEventListener("input", applySearch);
 document.getElementById("refresh").addEventListener("click", render);
-document.getElementById("reset").addEventListener("click", ()=>{
-  document.getElementById("q").value=""; applySearch("");
-});
+document.getElementById("reset").addEventListener("click", ()=>{ Q.value=""; applySearch(); });
 
 render();
 </script>
