@@ -37,8 +37,11 @@
 </div>
 
 <script>
+/* --------- CONFIG --------- */
 const REPO = "All83660/bibliotheque-vegetaux";
-const PATH = "photo"; // ton dossier d'images
+const PATH = "photos"; // dossier d’images
+/* -------------------------- */
+
 let CACHE = [];
 
 function normalize(str){
@@ -50,61 +53,61 @@ function normalize(str){
 
 async function listImages(){
   const url = `https://api.github.com/repos/${REPO}/contents/${PATH}`;
-  const r = await fetch(url);
+  const r = await fetch(url, {
+    headers:{ "Accept":"application/vnd.github+json" },
+    cache:"no-store"
+  });
   if(!r.ok) throw new Error("Impossible de charger la liste des images");
-  return await r.json();
+  return r.json();
 }
 
-function makeCard(file){
+function cardDOM(file){
   const div = document.createElement("div");
-  div.className="card";
-  div.dataset.nom = file.name.split(".")[0];
-  div.dataset.file = file.name;
-  div.innerHTML = `
-    <img class="thumb" src="${file.download_url}" alt="">
-    <div class="meta">
-      <div class="title">${file.name.split(".")[0]}</div>
-      <div class="row">
-        <a class="btn" href="${file.download_url}" target="_blank">Ouvrir</a>
-        <button class="btn" onclick="navigator.clipboard.writeText('${file.download_url}')">Copier lien</button>
-        <button class="btn" onclick="telechargerImage('${file.download_url}', '${file.name}')">Télécharger</button>
-      </div>
-    </div>`;
+  div.className = "card";
+  div.dataset.nom = file.name.replace(/\.[^.]+$/,"").toLowerCase();
+
+  const img = document.createElement("img");
+  img.className = "thumb";
+  img.src = file.download_url;
+  img.alt = "";
+
+  const meta = document.createElement("div");
+  meta.className = "meta";
+
+  const title = document.createElement("div");
+  title.className = "title";
+  title.textContent = file.name.replace(/\.[^.]+$/,"");
+
+  const row = document.createElement("div");
+  row.className = "row";
+
+  const open = document.createElement("a");
+  open.className = "btn";
+  open.textContent = "Ouvrir";
+  open.href = file.download_url;
+  open.target = "_blank";
+  open.rel = "noreferrer";
+
+  const copy = document.createElement("button");
+  copy.className = "btn";
+  copy.textContent = "Copier lien";
+  copy.addEventListener("click", () =>
+    navigator.clipboard.writeText(file.download_url)
+  );
+
+  const dl = document.createElement("button");
+  dl.className = "btn";
+  dl.textContent = "Télécharger";
+  dl.addEventListener("click", () => telechargerImage(file.download_url, file.name));
+
+  row.append(open, copy, dl);
+  meta.append(title, row);
+  div.append(img, meta);
   return div;
 }
 
-async function render(){
-  const grid = document.getElementById("grid");
-  grid.innerHTML = "Chargement…";
-  try{
-    if(!CACHE.length) CACHE = await listImages();
-    grid.innerHTML="";
-    CACHE.filter(f=>f.type==="file").forEach(file=>{
-      grid.appendChild(makeCard(file));
-    });
-    updateCounter();
-  }catch(e){
-    grid.innerHTML = `<div style="padding:20px;color:#b00">Erreur: ${e.message}</div>`;
-  }
-}
-
-function updateCounter(){
-  const total = document.querySelectorAll("#grid .card").length;
-  const visible = document.querySelectorAll("#grid .card:not([hidden])").length;
-  document.getElementById("counter").textContent = `${visible}/${total} visibles`;
-}
-
-function applySearch(q){
-  const nq = normalize(q);
-  document.querySelectorAll("#grid .card").forEach(card=>{
-    const name = normalize(card.dataset.nom);
-    card.hidden = !name.includes(nq);
-  });
-  updateCounter();
-}
-
 async function telechargerImage(url, filename){
-  const res = await fetch(url);
+  const res = await fetch(url, { cache:"no-store" });
   const blob = await res.blob();
   const a = document.createElement("a");
   a.href = URL.createObjectURL(blob);
@@ -115,10 +118,39 @@ async function telechargerImage(url, filename){
   setTimeout(()=>URL.revokeObjectURL(a.href),1500);
 }
 
-// events
+function applySearch(q){
+  const nq = normalize(q);
+  document.querySelectorAll("#grid .card").forEach(c=>{
+    c.hidden = !normalize(c.dataset.nom).includes(nq);
+  });
+  updateCounter();
+}
+
+function updateCounter(){
+  const all = document.querySelectorAll("#grid .card").length;
+  const vis = document.querySelectorAll("#grid .card:not([hidden])").length;
+  document.getElementById("counter").textContent = `${vis}/${all} visibles`;
+}
+
+async function render(){
+  const grid = document.getElementById("grid");
+  grid.textContent = "Chargement…";
+  try{
+    CACHE = await listImages();
+    grid.innerHTML = "";
+    CACHE.filter(f=>f.type==="file").forEach(f=>grid.appendChild(cardDOM(f)));
+    updateCounter();
+  }catch(e){
+    grid.innerHTML = `<div style="padding:20px;color:#b00">Erreur: ${e.message}</div>`;
+  }
+}
+
+/* événements */
 document.getElementById("q").addEventListener("input", e=>applySearch(e.target.value));
-document.getElementById("refresh").addEventListener("click", ()=>{CACHE=[];render();});
-document.getElementById("reset").addEventListener("click", ()=>{document.getElementById("q").value="";applySearch("");});
+document.getElementById("refresh").addEventListener("click", render);
+document.getElementById("reset").addEventListener("click", ()=>{
+  document.getElementById("q").value=""; applySearch("");
+});
 
 render();
 </script>
