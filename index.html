@@ -5,126 +5,100 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Bibliothèque de végétaux</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 20px;
-      background: #f5f5f5;
-    }
-    h1 {
-      text-align: center;
-    }
-    .controls {
-      text-align: center;
-      margin-bottom: 20px;
-    }
-    input {
-      padding: 8px;
-      width: 250px;
-      margin-right: 10px;
-    }
-    button {
+    body { font-family: Arial, sans-serif; margin: 20px; background: #f5f5f5; }
+    h1 { text-align: center; }
+    .controls { text-align: center; margin: 16px 0 24px; }
+    .controls input { padding: 8px; width: 280px; margin-right: 10px; }
+    .btn {
+      display: inline-block;
       padding: 8px 12px;
       margin: 2px;
-      background: none;
+      background: #fff;
       border: 1px solid #aaa;
-      border-radius: 4px;
-      cursor: pointer;
-      color: black; /* texte noir */
-      text-decoration: none; /* pas de soulignement */
-    }
-    button:hover {
-      background: #e0e0e0;
-    }
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      gap: 20px;
-    }
-    .card {
-      background: white;
       border-radius: 6px;
-      padding: 10px;
+      color: #000;               /* texte noir */
+      text-decoration: none;     /* pas de souligné */
+      cursor: pointer;
+    }
+    .btn:hover { background: #e9e9e9; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 20px; }
+    .card {
+      background: #fff; border-radius: 8px; padding: 12px;
       box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-      text-align: center;
     }
-    .card img {
-      max-width: 100%;
-      border-radius: 4px;
-    }
-    .buttons {
-      margin-top: 8px;
-      display: flex;
-      justify-content: center;
-      gap: 6px;
-    }
+    .card img { width: 100%; height: 160px; object-fit: cover; border-radius: 6px; background:#eee; }
+    .title { font-weight: 600; margin: 8px 0 4px; }
+    .buttons { display: flex; gap: 8px; flex-wrap: wrap; }
   </style>
 </head>
 <body>
   <h1>Bibliothèque de végétaux</h1>
+
   <div class="controls">
     <input type="text" id="search" placeholder="Rechercher..." />
-    <button onclick="loadPhotos()">Actualiser</button>
-    <button onclick="resetSearch()">Réinitialiser</button>
+    <a class="btn" onclick="loadPhotos()">Actualiser</a>
+    <a class="btn" onclick="resetSearch()">Réinitialiser</a>
   </div>
+
   <div id="gallery" class="grid"></div>
 
   <script>
+    let CACHE = [];
+
+    function baseName(name) {
+      return name.replace(/\.[^/.]+$/, "");
+    }
+
+    async function fetchPhotos() {
+      const res = await fetch("photos.json", { cache: "no-store" });
+      if (!res.ok) throw new Error("Impossible de charger photos.json");
+      return res.json();
+    }
+
+    function render(list) {
+      const grid = document.getElementById("gallery");
+      grid.innerHTML = "";
+      list.forEach(p => {
+        // p.url vient de photos.json généré (jsDelivr)
+        const img = p.url;
+        const title = baseName(p.name);
+
+        const card = document.createElement("div");
+        card.className = "card";
+        card.innerHTML = `
+          <img src="${img}" alt="${title}" loading="lazy" />
+          <div class="title">${title}</div>
+          <div class="buttons">
+            <a class="btn" target="_blank" href="${img}">Ouvrir</a>
+            <a class="btn" href="${img}" download>Télécharger</a>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
     async function loadPhotos() {
-      const gallery = document.getElementById('gallery');
-      gallery.innerHTML = "Chargement...";
-
+      const grid = document.getElementById("gallery");
+      grid.innerHTML = "Chargement...";
       try {
-        const response = await fetch("photos.json"); // fichier généré automatiquement
-        const photos = await response.json();
-
-        gallery.innerHTML = "";
-        photos.forEach(photo => {
-          const card = document.createElement("div");
-          card.className = "card";
-          card.innerHTML = `
-            <img src="${photo.download_url}" alt="${photo.name}" />
-            <div>${photo.name.replace(/\.[^/.]+$/, "")}</div>
-            <div class="buttons">
-              <button onclick="window.open('${photo.download_url}', '_blank')">Ouvrir</button>
-              <a href="${photo.download_url}" download><button>Télécharger</button></a>
-            </div>
-          `;
-          gallery.appendChild(card);
-        });
+        CACHE = await fetchPhotos();
+        render(CACHE);
       } catch (e) {
-        gallery.innerHTML = "<p style='color:red'>Erreur : impossible de charger les images.</p>";
+        grid.innerHTML = "<p style='color:red'>Erreur : impossible de charger les images.</p>";
+        console.error(e);
       }
     }
 
     function resetSearch() {
-      document.getElementById('search').value = "";
-      loadPhotos();
+      document.getElementById("search").value = "";
+      render(CACHE);
     }
 
-    // Recherche
-    document.getElementById('search').addEventListener("input", async function () {
-      const term = this.value.toLowerCase();
-      const response = await fetch("photos.json");
-      const photos = await response.json();
-
-      const gallery = document.getElementById('gallery');
-      gallery.innerHTML = "";
-
-      photos
-        .filter(p => p.name.toLowerCase().includes(term))
-        .forEach(photo => {
-          const card = document.createElement("div");
-          card.className = "card";
-          card.innerHTML = `
-            <img src="${photo.download_url}" alt="${photo.name}" />
-            <div>${photo.name.replace(/\.[^/.]+$/, "")}</div>
-            <div class="buttons">
-              <button onclick="window.open('${photo.download_url}', '_blank')">Ouvrir</button>
-              <a href="${photo.download_url}" download><button>Télécharger</button></a>
-            </div>
-          `;
-          gallery.appendChild(card);
-        });
+    document.getElementById("search").addEventListener("input", function () {
+      const q = this.value.trim().toLowerCase();
+      if (!q) return render(CACHE);
+      const filtered = CACHE.filter(p => p.name.toLowerCase().includes(q));
+      render(filtered);
     });
 
     loadPhotos();
