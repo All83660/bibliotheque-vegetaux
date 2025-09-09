@@ -7,150 +7,167 @@
   <style>
     body {
       font-family: Arial, sans-serif;
+      background: #f8f8f8;
       margin: 0;
       padding: 0;
-      background: #f5f5f5;
     }
     header {
       text-align: center;
       padding: 20px;
     }
-    h1 {
-      margin: 0 0 10px;
+    header h1 {
+      margin: 0;
     }
-    #search {
-      padding: 8px;
+    #controls {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    #controls input {
+      padding: 6px;
       width: 250px;
-      margin-right: 8px;
-    }
-    button {
-      padding: 8px 12px;
-      margin: 2px;
-      border: 1px solid #333;
-      background: white;
-      cursor: pointer;
-    }
-    button:hover {
-      background: #eee;
     }
     #gallery {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-      gap: 16px;
+      gap: 20px;
       padding: 20px;
     }
     .card {
       background: white;
-      border-radius: 6px;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
       padding: 10px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
       text-align: center;
     }
     .card img {
-      max-width: 100%;
-      max-height: 160px;
+      width: 100%;
+      height: 180px;
       object-fit: cover;
-      border-radius: 4px;
+      border-radius: 6px;
+      margin-bottom: 8px;
     }
-    .card h3 {
-      font-size: 14px;
-      margin: 8px 0;
-      font-weight: bold;
+    .card strong {
+      display: block;
+      margin-bottom: 10px;
     }
-    .actions {
-      margin-top: 6px;
+    .card button {
+      margin: 5px;
+      padding: 6px 10px;
+      border: 1px solid black;
+      background: white;
+      cursor: pointer;
     }
-    .actions a {
-      text-decoration: none;
-      color: black;
-      border: 1px solid #333;
-      padding: 5px 10px;
-      margin: 2px;
-      display: inline-block;
-      border-radius: 4px;
-    }
-    .actions a:hover {
+    .card button:hover {
       background: #eee;
+    }
+    #error {
+      color: red;
+      text-align: center;
+      margin: 20px;
     }
   </style>
 </head>
 <body>
   <header>
     <h1>Bibliothèque de végétaux</h1>
+  </header>
+
+  <div id="controls">
     <input type="text" id="search" placeholder="Rechercher..." />
     <button onclick="loadPhotos()">Actualiser</button>
     <button onclick="resetSearch()">Réinitialiser</button>
-  </header>
-  <main>
-    <div id="gallery">Chargement…</div>
-  </main>
+  </div>
+
+  <div id="error"></div>
+  <div id="gallery"></div>
 
   <script>
     async function loadPhotos() {
+      const errorEl = document.getElementById("error");
+      const gallery = document.getElementById("gallery");
+      errorEl.textContent = "";
+      gallery.innerHTML = "Chargement...";
+
       try {
-        const response = await fetch("photos.json"); // généré automatiquement par le workflow
-        if (!response.ok) throw new Error("Impossible de charger la liste");
-        const photos = await response.json();
-
-        const gallery = document.getElementById("gallery");
+        const res = await fetch("photos.json?nocache=" + Date.now());
+        if (!res.ok) throw new Error("Impossible de charger la liste");
+        const photos = await res.json();
+        displayPhotos(photos);
+      } catch (err) {
+        errorEl.textContent = "Erreur: " + err.message;
         gallery.innerHTML = "";
+      }
+    }
 
-        photos.forEach(photo => {
-          const card = document.createElement("div");
-          card.className = "card";
+    function displayPhotos(photos) {
+      const gallery = document.getElementById("gallery");
+      const searchValue = document.getElementById("search").value.toLowerCase();
+      gallery.innerHTML = "";
 
-          const img = document.createElement("img");
-          img.src = photo.url;
-          img.alt = photo.name;
+      const filtered = photos.filter(p => p.name.toLowerCase().includes(searchValue));
 
-          const title = document.createElement("h3");
-          title.textContent = photo.name; // nom complet du fichier
+      filtered.forEach(photo => {
+        const card = document.createElement("div");
+        card.className = "card";
 
-          const actions = document.createElement("div");
-          actions.className = "actions";
+        const img = document.createElement("img");
+        img.src = photo.url;
+        img.alt = photo.name;
 
-          const openBtn = document.createElement("a");
-          openBtn.href = photo.url;
-          openBtn.target = "_blank";
-          openBtn.textContent = "Ouvrir";
+        const title = document.createElement("strong");
+        title.textContent = photo.name.replace(/\.[^/.]+$/, "");
 
-          const dlBtn = document.createElement("a");
-          dlBtn.href = photo.url;
-          dlBtn.download = photo.name; // force le téléchargement
-          dlBtn.textContent = "Télécharger";
-
-          actions.appendChild(openBtn);
-          actions.appendChild(dlBtn);
-
-          card.appendChild(img);
-          card.appendChild(title);
-          card.appendChild(actions);
-
-          gallery.appendChild(card);
+        const openBtn = document.createElement("button");
+        openBtn.textContent = "Ouvrir";
+        openBtn.addEventListener("click", () => {
+          window.open(photo.url, "_blank");
         });
 
-      } catch (err) {
-        document.getElementById("gallery").innerHTML =
-          `<p style="color:red">Erreur: ${err.message}</p>`;
+        const dlBtn = document.createElement("button");
+        dlBtn.textContent = "Télécharger";
+        dlBtn.addEventListener("click", (e) => {
+          e.preventDefault();
+          forceDownload(photo.url, photo.name);
+        });
+
+        card.appendChild(img);
+        card.appendChild(title);
+        card.appendChild(openBtn);
+        card.appendChild(dlBtn);
+
+        gallery.appendChild(card);
+      });
+
+      if (filtered.length === 0) {
+        gallery.innerHTML = "<p style='grid-column:1/-1;text-align:center'>Aucun résultat</p>";
       }
     }
 
     function resetSearch() {
       document.getElementById("search").value = "";
-      const cards = document.querySelectorAll(".card");
-      cards.forEach(card => card.style.display = "block");
+      loadPhotos();
     }
 
-    document.getElementById("search").addEventListener("input", function () {
-      const value = this.value.toLowerCase();
-      const cards = document.querySelectorAll(".card");
-      cards.forEach(card => {
-        const title = card.querySelector("h3").textContent.toLowerCase();
-        card.style.display = title.includes(value) ? "block" : "none";
-      });
-    });
+    // Force le téléchargement dans "Téléchargements"
+    async function forceDownload(url, filename) {
+      try {
+        const res = await fetch(url, { mode: "cors", cache: "no-store" });
+        if (!res.ok) throw new Error("Téléchargement impossible");
+        const blob = await res.blob();
 
-    // Charger les photos au démarrage
+        const a = document.createElement("a");
+        const objectUrl = URL.createObjectURL(blob);
+        a.href = objectUrl;
+        a.download = filename || "fichier";
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(objectUrl);
+      } catch (err) {
+        alert("Erreur lors du téléchargement : " + err.message);
+      }
+    }
+
     loadPhotos();
   </script>
 </body>
