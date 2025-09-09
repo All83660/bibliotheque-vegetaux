@@ -5,169 +5,167 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Bibliothèque de végétaux</title>
   <style>
-    body {
+    :root{
+      --gap:20px;
+      --radius:8px;
+      --shadow:0 2px 6px rgba(0,0,0,.1);
+    }
+    *{box-sizing:border-box}
+    body{
       font-family: Arial, sans-serif;
-      background: #f8f8f8;
-      margin: 0;
-      padding: 0;
+      background:#f8f8f8;
+      margin:0;
     }
-    header {
-      text-align: center;
-      padding: 20px;
+    header{padding:20px;text-align:center}
+    h1{margin:0}
+    #controls{
+      display:flex;gap:10px;justify-content:center;align-items:center;
+      padding:0 20px 10px 20px;flex-wrap:wrap;
     }
-    header h1 {
-      margin: 0;
+    #search{padding:8px 10px;width:280px;max-width:90vw}
+    #controls button{
+      padding:8px 12px;border:1px solid #000;background:#fff;cursor:pointer;border-radius:6px
     }
-    #controls {
-      text-align: center;
-      margin-bottom: 20px;
+    #controls button:hover{background:#eee}
+    #error{color:#c00;text-align:center;margin:10px 20px}
+    #gallery{
+      display:grid;gap:var(--gap);padding:20px;
+      grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
     }
-    #controls input {
-      padding: 6px;
-      width: 250px;
+    .card{
+      background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);
+      padding:10px;text-align:center;display:flex;flex-direction:column;gap:8px
     }
-    #gallery {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-      gap: 20px;
-      padding: 20px;
+    .card img{
+      width:100%;height:180px;object-fit:cover;border-radius:6px
     }
-    .card {
-      background: white;
-      border-radius: 8px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-      padding: 10px;
-      text-align: center;
+    .title{font-weight:600;min-height:2.2em}
+    .btnrow{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+    .btnrow button{
+      padding:6px 10px;border:1px solid #000;background:#fff;cursor:pointer;border-radius:6px
     }
-    .card img {
-      width: 100%;
-      height: 180px;
-      object-fit: cover;
-      border-radius: 6px;
-      margin-bottom: 8px;
-    }
-    .card strong {
-      display: block;
-      margin-bottom: 10px;
-    }
-    .card button {
-      margin: 5px;
-      padding: 6px 10px;
-      border: 1px solid black;
-      background: white;
-      cursor: pointer;
-    }
-    .card button:hover {
-      background: #eee;
-    }
-    #error {
-      color: red;
-      text-align: center;
-      margin: 20px;
-    }
+    .btnrow button:hover{background:#eee}
   </style>
 </head>
 <body>
-  <header>
-    <h1>Bibliothèque de végétaux</h1>
-  </header>
+  <header><h1>Bibliothèque de végétaux</h1></header>
 
   <div id="controls">
-    <input type="text" id="search" placeholder="Rechercher..." />
-    <button onclick="loadPhotos()">Actualiser</button>
-    <button onclick="resetSearch()">Réinitialiser</button>
+    <input id="search" type="text" placeholder="Rechercher..." />
+    <button id="refresh">Actualiser</button>
+    <button id="reset">Réinitialiser</button>
   </div>
 
   <div id="error"></div>
   <div id="gallery"></div>
 
   <script>
+    let PHOTOS = [];
+
+    // Chargement de la liste
     async function loadPhotos() {
-      const errorEl = document.getElementById("error");
-      const gallery = document.getElementById("gallery");
-      errorEl.textContent = "";
-      gallery.innerHTML = "Chargement...";
+      const errorEl = document.getElementById('error');
+      const gallery = document.getElementById('gallery');
+      errorEl.textContent = '';
+      gallery.innerHTML = 'Chargement...';
 
       try {
-        const res = await fetch("photos.json?nocache=" + Date.now());
-        if (!res.ok) throw new Error("Impossible de charger la liste");
-        const photos = await res.json();
-        displayPhotos(photos);
-      } catch (err) {
-        errorEl.textContent = "Erreur: " + err.message;
-        gallery.innerHTML = "";
+        // photos.json est généré par ton workflow
+        const res = await fetch('photos.json?nocache=' + Date.now());
+        if (!res.ok) throw new Error('Impossible de charger la liste');
+        PHOTOS = await res.json();
+        render();
+      } catch (e) {
+        errorEl.textContent = 'Erreur : ' + e.message;
+        gallery.innerHTML = '';
       }
     }
 
-    function displayPhotos(photos) {
-      const gallery = document.getElementById("gallery");
-      const searchValue = document.getElementById("search").value.toLowerCase();
-      gallery.innerHTML = "";
+    // Rendu selon la recherche
+    function render() {
+      const q = document.getElementById('search').value.trim().toLowerCase();
+      const gallery = document.getElementById('gallery');
+      gallery.innerHTML = '';
 
-      const filtered = photos.filter(p => p.name.toLowerCase().includes(searchValue));
+      const filtered = PHOTOS.filter(p => p.name.toLowerCase().includes(q));
 
-      filtered.forEach(photo => {
-        const card = document.createElement("div");
-        card.className = "card";
+      for (const p of filtered) {
+        const card = document.createElement('div');
+        card.className = 'card';
 
-        const img = document.createElement("img");
-        img.src = photo.url;
-        img.alt = photo.name;
+        const img = document.createElement('img');
+        img.src = p.url;  // URL servie par jsDelivr ou raw
+        img.alt = p.name;
 
-        const title = document.createElement("strong");
-        title.textContent = photo.name.replace(/\.[^/.]+$/, "");
+        const title = document.createElement('div');
+        title.className = 'title';
+        title.textContent = p.name.replace(/\.[^/.]+$/, '');
 
-        const openBtn = document.createElement("button");
-        openBtn.textContent = "Ouvrir";
-        openBtn.addEventListener("click", () => {
-          window.open(photo.url, "_blank");
-        });
+        const row = document.createElement('div');
+        row.className = 'btnrow';
 
-        const dlBtn = document.createElement("button");
-        dlBtn.textContent = "Télécharger";
-        dlBtn.addEventListener("click", (e) => {
+        const openBtn = document.createElement('button');
+        openBtn.textContent = 'Ouvrir';
+        openBtn.addEventListener('click', () => window.open(p.url, '_blank'));
+
+        const dlBtn = document.createElement('button');
+        dlBtn.textContent = 'Télécharger';
+        dlBtn.addEventListener('click', (e) => {
           e.preventDefault();
-          forceDownload(photo.url, photo.name);
+          downloadFile(p.url, p.name);
         });
+
+        row.appendChild(openBtn);
+        row.appendChild(dlBtn);
 
         card.appendChild(img);
         card.appendChild(title);
-        card.appendChild(openBtn);
-        card.appendChild(dlBtn);
-
+        card.appendChild(row);
         gallery.appendChild(card);
-      });
+      }
 
       if (filtered.length === 0) {
-        gallery.innerHTML = "<p style='grid-column:1/-1;text-align:center'>Aucun résultat</p>";
+        gallery.innerHTML = "<p style='grid-column:1 / -1; text-align:center'>Aucun résultat</p>";
       }
     }
 
-    function resetSearch() {
-      document.getElementById("search").value = "";
-      loadPhotos();
-    }
-
-    // Force le téléchargement dans "Téléchargements"
-    async function forceDownload(url, filename) {
+    // Téléchargement avec fallback
+    async function downloadFile(url, filename) {
       try {
-        const res = await fetch(url, { mode: "cors", cache: "no-store" });
-        if (!res.ok) throw new Error("Téléchargement impossible");
+        // 1) Méthode propre (blob) — fonctionne quand le CDN autorise CORS
+        const res = await fetch(url, { mode: 'cors', cache: 'no-store' });
+        if (!res.ok) throw new Error('HTTP ' + res.status);
         const blob = await res.blob();
-
-        const a = document.createElement("a");
         const objectUrl = URL.createObjectURL(blob);
+
+        const a = document.createElement('a');
         a.href = objectUrl;
-        a.download = filename || "fichier";
+        a.download = filename || 'fichier';
         document.body.appendChild(a);
         a.click();
         a.remove();
         URL.revokeObjectURL(objectUrl);
       } catch (err) {
-        alert("Erreur lors du téléchargement : " + err.message);
+        // 2) Solution de repli : on déclenche un lien direct.
+        // Selon le domaine, le navigateur peut télécharger (souvent OK avec jsDelivr),
+        // sinon il ouvrira l’image dans un nouvel onglet.
+        const a = document.createElement('a');
+        a.href = url;
+        a.setAttribute('download', filename || 'fichier');
+        a.target = '_blank';
+        a.rel = 'noopener';
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
       }
     }
 
+    // Écouteurs
+    document.getElementById('refresh').addEventListener('click', loadPhotos);
+    document.getElementById('reset').addEventListener('click', () => { document.getElementById('search').value = ''; render(); });
+    document.getElementById('search').addEventListener('input', render);
+
+    // Init
     loadPhotos();
   </script>
 </body>
