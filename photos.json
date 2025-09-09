@@ -1,18 +1,82 @@
 [
-  "photos/Acca sellowiana 250-300.JPEG",
-  "photos/Cinnamomum camphora 300-350.JPEG",
-  "photos/Eriobotrya japonica 20-25.JPEG",
-  "photos/Eriobotrya japonica 225-250.JPEG",
-  "photos/Eriobotrya japonica 250-275.JPEG",
-  "photos/Eriobotrya japonica 350-400.JPEG",
-  "photos/Gleditsia triacanthos 'Inermis' 300-350.JPEG",
-  "photos/Lagerstroemia indica 'Violacea' 300-350.JPEG",
-  "photos/Lagerstroemia indica 'Violacea' 35-40.JPEG",
-  "photos/Laurus nobilis 300-350.JPEG",
-  "photos/Melia azedarach 25-30 (1).jpg",
-  "photos/Melia azedarach 300-350.JPEG",
-  "photos/Melia azedarach 35-40.JPEG",
-  "photos/Osmanthus fortunei h 350.JPEG",
-  "photos/Osmanthus heterophyllus 200-250.JPEG",
-  "photos/Pyracantha coccinea 80-100.JPEG"
+  {
+    "name": "Acca sellowiana 250-300.JPEG",
+    "path": "photos/Acca sellowiana 250-300.JPEG",
+    "url": "https://cdn.jsdelivr.net/gh/All83660/bibliotheque-vegetaux/photos/Acca%20sellowiana%20250-300.JPEG"
+  },
+  {
+    "name": "Cinnamomum camphora 300-350.JPEG",
+    "path": "photos/Cinnamomum camphora 300-350.JPEG",
+    "url": "https://cdn.jsdelivr.net/gh/All83660/bibliotheque-vegetaux/photos/Cinnamomum%20camphora%20300-350.JPEG"
+  },
+  {
+    "name": "Eriobotrya japonica 20-25.JPEG",
+    "path": "photos/Eriobotrya japonica 20-25.JPEG",
+    "url": "https://cdn.jsdelivr.net/gh/All83660/bibliotheque-vegetaux/photos/Eriobotrya%20japonica%2020-25.JPEG"
+  },
+  {
+    "name": "Eriobotrya japonica 225-250.JPEG",
+    "path": "photos/Eriobotrya japonica 225-250.JPEG",
+    "url": "https://cdn.jsdelivr.net/gh/All83660/bibliotheque-vegetaux/photos/Eriobotrya%20japonica%20225-250.JPEG"
+  },
+  {
+    "name": "Eriobotrya japonica 250-275.JPEG",
+    "path": "photos/Eriobotrya japonica 250-275.JPEG",
+    "url": "https://cdn.jsdelivr.net/gh/All83660/bibliotheque-vegetaux/photos/Eriobotrya%20japonica%20250-275.JPEG"
+  },
+  {
+    "name": "Eriobotrya japonica 350-400.JPEG",
+    "path": "photos/Eriobotrya japonica 350-400.JPEG",
+    "url": "https://cdn.jsdelivr.net/gh/All83660/bibliotheque-vegetaux/photos/Eriobotrya%20japonica%20350-400.JPEG"
+  },
+  {
+    "name": "Gleditsia triacanthos 'Inermis' 300-350.JPEG",
+    "path": "photos/Gleditsia triacanthos 'Inermis' 300-350.JPEG",
+    "url": "https://cdn.jsdelivr.net/gh/All83660/bibliotheque-vegetaux/photos/Gleditsia%20triacanthos%20'Inermis'%20300-350.JPEG"
+  },
+  {
+    "name": "Lagerstroemia indica 'Violacea' 300-350.JPEG",
+    "path": "photos/Lagerstroemia indica 'Violacea' 300-350.JPEG",
+    "url": "https://cdn.jsdelivr.net/gh/All83660/bibliotheque-vegetaux/photos/Lagerstroemia%20indica%20'Violacea'%20300-350.JPEG"
+  },
+  {
+    "name": "Lagerstroemia indica 'Violacea' 35-40.JPEG",
+    "path": "photos/Lagerstroemia indica 'Violacea' 35-40.JPEG",
+    "url": "https://cdn.jsdelivr.net/gh/All83660/bibliotheque-vegetaux/photos/Lagerstroemia%20indica%20'Violacea'%2035-40.JPEG"
+  },
+  {
+    "name": "Laurus nobilis 300-350.JPEG",
+    "path": "photos/Laurus nobilis 300-350.JPEG",
+    "url": "https://cdn.jsdelivr.net/gh/All83660/bibliotheque-vegetaux/photos/Laurus%20nobilis%20300-350.JPEG"
+  },
+  {
+    "name": "Melia azedarach 25-30 (1).jpg",
+    "path": "photos/Melia azedarach 25-30 (1).jpg",
+    "url": "https://cdn.jsdelivr.net/gh/All83660/bibliotheque-vegetaux/photos/Melia%20azedarach%2025-30%20(1).jpg"
+  },
+  {
+    "name": "Melia azedarach 300-350.JPEG",
+    "path": "photos/Melia azedarach 300-350.JPEG",
+    "url": "https://cdn.jsdelivr.net/gh/All83660/bibliotheque-vegetaux/photos/Melia%20azedarach%20300-350.JPEG"
+  },
+  {
+    "name": "Melia azedarach 35-40.JPEG",
+    "path": "photos/Melia azedarach 35-40.JPEG",
+    "url": "https://cdn.jsdelivr.net/gh/All83660/bibliotheque-vegetaux/photos/Melia%20azedarach%2035-40.JPEG"
+  },
+  {
+    "name": "Osmanthus fortunei h 350.JPEG",
+    "path": "photos/Osmanthus fortunei h 350.JPEG",
+    "url": "https://cdn.jsdelivr.net/gh/All83660/bibliotheque-vegetaux/photos/Osmanthus%20fortunei%20h%20350.JPEG"
+  },
+  {
+    "name": "Osmanthus heterophyllus 200-250.JPEG",
+    "path": "photos/Osmanthus heterophyllus 200-250.JPEG",
+    "url": "https://cdn.jsdelivr.net/gh/All83660/bibliotheque-vegetaux/photos/Osmanthus%20heterophyllus%20200-250.JPEG"
+  },
+  {
+    "name": "Pyracantha coccinea 80-100.JPEG",
+    "path": "photos/Pyracantha coccinea 80-100.JPEG",
+    "url": "https://cdn.jsdelivr.net/gh/All83660/bibliotheque-vegetaux/photos/Pyracantha%20coccinea%2080-100.JPEG"
+  }
 ]
