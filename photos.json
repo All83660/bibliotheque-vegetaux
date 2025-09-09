@@ -45,6 +45,16 @@
     "url": "https://cdn.jsdelivr.net/gh/All83660/bibliotheque-vegetaux/photos/Acer%20platanoides%20'Crimson%20King'%2030-35.jpeg"
   },
   {
+    "name": "Aloe aarborescens C20.JPEG",
+    "path": "photos/Aloe aarborescens C20.JPEG",
+    "url": "https://cdn.jsdelivr.net/gh/All83660/bibliotheque-vegetaux/photos/Aloe%20aarborescens%20C20.JPEG"
+  },
+  {
+    "name": "Aloe ferox C20.JPEG",
+    "path": "photos/Aloe ferox C20.JPEG",
+    "url": "https://cdn.jsdelivr.net/gh/All83660/bibliotheque-vegetaux/photos/Aloe%20ferox%20C20.JPEG"
+  },
+  {
     "name": "Araucaries Araucanes 400-450.jpg",
     "path": "photos/Araucaries Araucanes 400-450.jpg",
     "url": "https://cdn.jsdelivr.net/gh/All83660/bibliotheque-vegetaux/photos/Araucaries%20Araucanes%20400-450.jpg"
@@ -58,6 +68,11 @@
     "name": "Brachychiton 30-35.jpg",
     "path": "photos/Brachychiton 30-35.jpg",
     "url": "https://cdn.jsdelivr.net/gh/All83660/bibliotheque-vegetaux/photos/Brachychiton%2030-35.jpg"
+  },
+  {
+    "name": "Brahea armata h 250-300.JPEG",
+    "path": "photos/Brahea armata h 250-300.JPEG",
+    "url": "https://cdn.jsdelivr.net/gh/All83660/bibliotheque-vegetaux/photos/Brahea%20armata%20h%20250-300.JPEG"
   },
   {
     "name": "Butia  3.00 m tronc .jpeg",
@@ -80,6 +95,11 @@
     "url": "https://cdn.jsdelivr.net/gh/All83660/bibliotheque-vegetaux/photos/CHAMEROS%20HUMILIS%20250-300.jpg"
   },
   {
+    "name": "Caesalpinia gillesii 20.JPEG",
+    "path": "photos/Caesalpinia gillesii 20.JPEG",
+    "url": "https://cdn.jsdelivr.net/gh/All83660/bibliotheque-vegetaux/photos/Caesalpinia%20gillesii%2020.JPEG"
+  },
+  {
     "name": "Callistemon citrinus splendens C18L.jpg",
     "path": "photos/Callistemon citrinus splendens C18L.jpg",
     "url": "https://cdn.jsdelivr.net/gh/All83660/bibliotheque-vegetaux/photos/Callistemon%20citrinus%20splendens%20C18L.jpg"
@@ -88,6 +108,11 @@
     "name": "Callistemon laevis C10L.jpg",
     "path": "photos/Callistemon laevis C10L.jpg",
     "url": "https://cdn.jsdelivr.net/gh/All83660/bibliotheque-vegetaux/photos/Callistemon%20laevis%20C10L.jpg"
+  },
+  {
+    "name": "Callistemon viminalis 'Hot Pink' 60-80.JPEG",
+    "path": "photos/Callistemon viminalis 'Hot Pink' 60-80.JPEG",
+    "url": "https://cdn.jsdelivr.net/gh/All83660/bibliotheque-vegetaux/photos/Callistemon%20viminalis%20'Hot%20Pink'%2060-80.JPEG"
   },
   {
     "name": "Catalpa bignoides 18-20.jpg",
@@ -148,6 +173,21 @@
     "name": "Cordyline Australis h 150-200 Cont..jpg",
     "path": "photos/Cordyline Australis h 150-200 Cont..jpg",
     "url": "https://cdn.jsdelivr.net/gh/All83660/bibliotheque-vegetaux/photos/Cordyline%20Australis%20h%20150-200%20Cont..jpg"
+  },
+  {
+    "name": "Cordyline australis 'Torbay Dazzler' 100-125.JPEG",
+    "path": "photos/Cordyline australis 'Torbay Dazzler' 100-125.JPEG",
+    "url": "https://cdn.jsdelivr.net/gh/All83660/bibliotheque-vegetaux/photos/Cordyline%20australis%20'Torbay%20Dazzler'%20100-125.JPEG"
+  },
+  {
+    "name": "Dasylirion longissimum C80.JPEG",
+    "path": "photos/Dasylirion longissimum C80.JPEG",
+    "url": "https://cdn.jsdelivr.net/gh/All83660/bibliotheque-vegetaux/photos/Dasylirion%20longissimum%20C80.JPEG"
+  },
+  {
+    "name": "Dasylirion wheeleri C130.JPEG",
+    "path": "photos/Dasylirion wheeleri C130.JPEG",
+    "url": "https://cdn.jsdelivr.net/gh/All83660/bibliotheque-vegetaux/photos/Dasylirion%20wheeleri%20C130.JPEG"
   },
   {
     "name": "Elaeagnus ebingei C18.jpg",
@@ -515,6 +555,11 @@
     "url": "https://cdn.jsdelivr.net/gh/All83660/bibliotheque-vegetaux/photos/Sabal%202.00%20m%20tronc%20.jpeg"
   },
   {
+    "name": "Sabal palmetto h 100-150.JPEG",
+    "path": "photos/Sabal palmetto h 100-150.JPEG",
+    "url": "https://cdn.jsdelivr.net/gh/All83660/bibliotheque-vegetaux/photos/Sabal%20palmetto%20h%20100-150.JPEG"
+  },
+  {
     "name": "Salix alba 30-35 .jpg",
     "path": "photos/Salix alba 30-35 .jpg",
     "url": "https://cdn.jsdelivr.net/gh/All83660/bibliotheque-vegetaux/photos/Salix%20alba%2030-35%20.jpg"
@@ -545,9 +590,34 @@
     "url": "https://cdn.jsdelivr.net/gh/All83660/bibliotheque-vegetaux/photos/Sophora%20japonica%2030-35%20.jpg"
   },
   {
+    "name": "Strelitzia nicolai 200-250.JPEG",
+    "path": "photos/Strelitzia nicolai 200-250.JPEG",
+    "url": "https://cdn.jsdelivr.net/gh/All83660/bibliotheque-vegetaux/photos/Strelitzia%20nicolai%20200-250.JPEG"
+  },
+  {
+    "name": "Strelitzia reginae 100-150.JPEG",
+    "path": "photos/Strelitzia reginae 100-150.JPEG",
+    "url": "https://cdn.jsdelivr.net/gh/All83660/bibliotheque-vegetaux/photos/Strelitzia%20reginae%20100-150.JPEG"
+  },
+  {
     "name": "Syagrus  Romanz. 6.00 m tronc .jpeg",
     "path": "photos/Syagrus  Romanz. 6.00 m tronc .jpeg",
     "url": "https://cdn.jsdelivr.net/gh/All83660/bibliotheque-vegetaux/photos/Syagrus%20%20Romanz.%206.00%20m%20tronc%20.jpeg"
+  },
+  {
+    "name": "Syagrus romanzoffiana h 200-250.JPEG",
+    "path": "photos/Syagrus romanzoffiana h 200-250.JPEG",
+    "url": "https://cdn.jsdelivr.net/gh/All83660/bibliotheque-vegetaux/photos/Syagrus%20romanzoffiana%20h%20200-250.JPEG"
+  },
+  {
+    "name": "Syagrus romanzoffiana h 250-300.JPEG",
+    "path": "photos/Syagrus romanzoffiana h 250-300.JPEG",
+    "url": "https://cdn.jsdelivr.net/gh/All83660/bibliotheque-vegetaux/photos/Syagrus%20romanzoffiana%20h%20250-300.JPEG"
+  },
+  {
+    "name": "Syagrus romanzoffiana h 600-700.JPEG",
+    "path": "photos/Syagrus romanzoffiana h 600-700.JPEG",
+    "url": "https://cdn.jsdelivr.net/gh/All83660/bibliotheque-vegetaux/photos/Syagrus%20romanzoffiana%20h%20600-700.JPEG"
   },
   {
     "name": "Thuya esmeralda C10L.jpg",
@@ -623,6 +693,31 @@
     "name": "Wash. Robusta 6.00 m tronc .jpeg",
     "path": "photos/Wash. Robusta 6.00 m tronc .jpeg",
     "url": "https://cdn.jsdelivr.net/gh/All83660/bibliotheque-vegetaux/photos/Wash.%20Robusta%206.00%20m%20tronc%20.jpeg"
+  },
+  {
+    "name": "Xanthorrea glauca st 100.JPEG",
+    "path": "photos/Xanthorrea glauca st 100.JPEG",
+    "url": "https://cdn.jsdelivr.net/gh/All83660/bibliotheque-vegetaux/photos/Xanthorrea%20glauca%20st%20100.JPEG"
+  },
+  {
+    "name": "Yucca elephantipes C50.JPEG",
+    "path": "photos/Yucca elephantipes C50.JPEG",
+    "url": "https://cdn.jsdelivr.net/gh/All83660/bibliotheque-vegetaux/photos/Yucca%20elephantipes%20C50.JPEG"
+  },
+  {
+    "name": "Yucca rostrata st 100-125.JPEG",
+    "path": "photos/Yucca rostrata st 100-125.JPEG",
+    "url": "https://cdn.jsdelivr.net/gh/All83660/bibliotheque-vegetaux/photos/Yucca%20rostrata%20st%20100-125.JPEG"
+  },
+  {
+    "name": "Yucca rostrata st 60-80.JPEG",
+    "path": "photos/Yucca rostrata st 60-80.JPEG",
+    "url": "https://cdn.jsdelivr.net/gh/All83660/bibliotheque-vegetaux/photos/Yucca%20rostrata%20st%2060-80.JPEG"
+  },
+  {
+    "name": "Yucca rostrata st 80-100.JPEG",
+    "path": "photos/Yucca rostrata st 80-100.JPEG",
+    "url": "https://cdn.jsdelivr.net/gh/All83660/bibliotheque-vegetaux/photos/Yucca%20rostrata%20st%2080-100.JPEG"
   },
   {
     "name": "abelia floribunda C10 .jpg",
