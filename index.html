@@ -1,145 +1,133 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Bibliothèque de végétaux</title>
-<style>
-  :root{--border:#ddd;--muted:#666}
-  body{font-family:Arial,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;margin:0;background:#f7f7f7;color:#222}
-  header{position:sticky;top:0;background:#fff;border-bottom:1px solid var(--border);padding:12px 16px;display:flex;gap:12px;align-items:center;z-index:10;flex-wrap:wrap}
-  header h1{margin:0;font-size:18px;font-weight:600}
-  .grow{flex:1;min-width:240px}
-  input[type="search"]{width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:8px;font-size:14px;background:#fff}
-  .wrap{max-width:1200px;margin:16px auto;padding:0 16px}
-  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px}
-  .card{background:#fff;border:1px solid var(--border);border-radius:8px;box-shadow:0 1px 2px rgba(0,0,0,.05);overflow:hidden;display:flex;flex-direction:column}
-  .card img{width:100%;height:180px;object-fit:cover;background:#fafafa}
-  .meta{padding:10px;display:flex;flex-direction:column;gap:6px;flex:1}
-  .title{font-weight:600;font-size:14px}
-  .subtitle{font-size:12px;color:var(--muted)}
-  .row{display:flex;gap:8px;flex-wrap:wrap;margin-top:auto}
-  .btn{flex:1;padding:6px 8px;border:1px solid var(--border);border-radius:6px;background:#fafafa;font-size:12px;cursor:pointer;text-align:center}
-  .btn:hover{background:#eee}
-  #error{color:#b00;padding:16px}
-  #counter{font-size:12px;color:var(--muted);margin-top:8px}
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bibliothèque de végétaux</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      background: #f5f5f5;
+    }
+    h1 {
+      text-align: center;
+    }
+    .controls {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    input {
+      padding: 8px;
+      width: 250px;
+      margin-right: 10px;
+    }
+    button {
+      padding: 8px 12px;
+      margin: 2px;
+      background: none;
+      border: 1px solid #aaa;
+      border-radius: 4px;
+      cursor: pointer;
+      color: black; /* texte noir */
+      text-decoration: none; /* pas de soulignement */
+    }
+    button:hover {
+      background: #e0e0e0;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 20px;
+    }
+    .card {
+      background: white;
+      border-radius: 6px;
+      padding: 10px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+    .card img {
+      max-width: 100%;
+      border-radius: 4px;
+    }
+    .buttons {
+      margin-top: 8px;
+      display: flex;
+      justify-content: center;
+      gap: 6px;
+    }
+  </style>
 </head>
 <body>
-<header>
   <h1>Bibliothèque de végétaux</h1>
-  <input id="q" class="grow" type="search" placeholder="Rechercher...">
-  <button class="btn" id="refresh">Actualiser</button>
-  <button class="btn" id="reset">Réinitialiser</button>
-</header>
+  <div class="controls">
+    <input type="text" id="search" placeholder="Rechercher..." />
+    <button onclick="loadPhotos()">Actualiser</button>
+    <button onclick="resetSearch()">Réinitialiser</button>
+  </div>
+  <div id="gallery" class="grid"></div>
 
-<div class="wrap">
-  <div id="error"></div>
-  <div id="grid" class="grid"></div>
-  <div id="counter"></div>
-</div>
+  <script>
+    async function loadPhotos() {
+      const gallery = document.getElementById('gallery');
+      gallery.innerHTML = "Chargement...";
 
-<script>
-const GRID = document.getElementById("grid");
-const ERR  = document.getElementById("error");
-const Q    = document.getElementById("q");
-const COUNTER = document.getElementById("counter");
+      try {
+        const response = await fetch("photos.json"); // fichier généré automatiquement
+        const photos = await response.json();
 
-let ALL = [];
+        gallery.innerHTML = "";
+        photos.forEach(photo => {
+          const card = document.createElement("div");
+          card.className = "card";
+          card.innerHTML = `
+            <img src="${photo.download_url}" alt="${photo.name}" />
+            <div>${photo.name.replace(/\.[^/.]+$/, "")}</div>
+            <div class="buttons">
+              <button onclick="window.open('${photo.download_url}', '_blank')">Ouvrir</button>
+              <a href="${photo.download_url}" download><button>Télécharger</button></a>
+            </div>
+          `;
+          gallery.appendChild(card);
+        });
+      } catch (e) {
+        gallery.innerHTML = "<p style='color:red'>Erreur : impossible de charger les images.</p>";
+      }
+    }
 
-function normalize(s){
-  return s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9]/g,"");
-}
+    function resetSearch() {
+      document.getElementById('search').value = "";
+      loadPhotos();
+    }
 
-async function loadList(){
-  ERR.textContent = "";
-  GRID.textContent = "Chargement…";
-  try{
-    const res = await fetch("./photos.json", { cache:"no-store" });
-    if(!res.ok) throw new Error("photos.json introuvable");
-    const files = await res.json();
+    // Recherche
+    document.getElementById('search').addEventListener("input", async function () {
+      const term = this.value.toLowerCase();
+      const response = await fetch("photos.json");
+      const photos = await response.json();
 
-    ALL = files
-      .filter(p=>/\.(jpe?g|png|webp|gif)$/i.test(p))
-      .map(p=>{
-        const name = p.split("/").pop().replace(/\.[^.]+$/, "");
-        const url  = `./${p}`;
-        return { path:p, name, url };
-      });
+      const gallery = document.getElementById('gallery');
+      gallery.innerHTML = "";
 
-    render();
-  }catch(e){
-    GRID.textContent = "";
-    ERR.textContent = "Erreur: " + e.message;
-  }
-}
+      photos
+        .filter(p => p.name.toLowerCase().includes(term))
+        .forEach(photo => {
+          const card = document.createElement("div");
+          card.className = "card";
+          card.innerHTML = `
+            <img src="${photo.download_url}" alt="${photo.name}" />
+            <div>${photo.name.replace(/\.[^/.]+$/, "")}</div>
+            <div class="buttons">
+              <button onclick="window.open('${photo.download_url}', '_blank')">Ouvrir</button>
+              <a href="${photo.download_url}" download><button>Télécharger</button></a>
+            </div>
+          `;
+          gallery.appendChild(card);
+        });
+    });
 
-function makeCard(item){
-  const card = document.createElement("div");
-  card.className = "card";
-  card.dataset.nom = item.name.toLowerCase();
-
-  const img = document.createElement("img");
-  img.src = item.url;
-  img.loading = "lazy";
-  img.alt = "";
-
-  const meta = document.createElement("div");
-  meta.className = "meta";
-
-  const title = document.createElement("div");
-  title.className = "title";
-  title.textContent = item.name;
-
-  const row = document.createElement("div");
-  row.className = "row";
-
-  const open = document.createElement("a");
-  open.className = "btn";
-  open.textContent = "Ouvrir";
-  open.href = item.url;
-  open.target = "_blank";
-  open.rel = "noreferrer";
-
-  const copy = document.createElement("button");
-  copy.className = "btn";
-  copy.textContent = "Copier lien";
-  copy.addEventListener("click", ()=>navigator.clipboard.writeText(new URL(item.url, location.href).href));
-
-  const dl = document.createElement("a");
-  dl.className = "btn";
-  dl.textContent = "Télécharger";
-  dl.href = item.url;
-  dl.download = item.name + item.url.match(/\.[^.]+$/)?.[0] ?? "";
-
-  row.append(open, copy, dl);
-  meta.append(title, row);
-  card.append(img, meta);
-  return card;
-}
-
-function applySearch(){
-  const nq = normalize(Q.value);
-  let vis = 0;
-  document.querySelectorAll("#grid .card").forEach(c=>{
-    const ok = normalize(c.dataset.nom).includes(nq);
-    c.hidden = !ok;
-    if(ok) vis++;
-  });
-  COUNTER.textContent = `${vis}/${ALL.length} visibles`;
-}
-
-function render(){
-  GRID.innerHTML = "";
-  ALL.forEach(it => GRID.appendChild(makeCard(it)));
-  applySearch();
-}
-
-document.getElementById("refresh").addEventListener("click", loadList);
-document.getElementById("reset").addEventListener("click", ()=>{ Q.value=""; applySearch(); });
-Q.addEventListener("input", applySearch);
-
-loadList();
-</script>
+    loadPhotos();
+  </script>
 </body>
 </html>
