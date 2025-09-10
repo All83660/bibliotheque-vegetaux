@@ -70,6 +70,21 @@
     "url": "https://cdn.jsdelivr.net/gh/All83660/bibliotheque-vegetaux/photos/Brachychiton%2030-35.jpg"
   },
   {
+    "name": "Brachychiton acerifolius 50-60.jpeg",
+    "path": "photos/Brachychiton acerifolius 50-60.jpeg",
+    "url": "https://cdn.jsdelivr.net/gh/All83660/bibliotheque-vegetaux/photos/Brachychiton%20acerifolius%2050-60.jpeg"
+  },
+  {
+    "name": "Brachychiton populneus 50-60.jpeg",
+    "path": "photos/Brachychiton populneus 50-60.jpeg",
+    "url": "https://cdn.jsdelivr.net/gh/All83660/bibliotheque-vegetaux/photos/Brachychiton%20populneus%2050-60.jpeg"
+  },
+  {
+    "name": "Brachychiton rupestris 110-140.jpeg",
+    "path": "photos/Brachychiton rupestris 110-140.jpeg",
+    "url": "https://cdn.jsdelivr.net/gh/All83660/bibliotheque-vegetaux/photos/Brachychiton%20rupestris%20110-140.jpeg"
+  },
+  {
     "name": "Brahea armata h 250-300.JPEG",
     "path": "photos/Brahea armata h 250-300.JPEG",
     "url": "https://cdn.jsdelivr.net/gh/All83660/bibliotheque-vegetaux/photos/Brahea%20armata%20h%20250-300.JPEG"
@@ -135,6 +150,11 @@
     "url": "https://cdn.jsdelivr.net/gh/All83660/bibliotheque-vegetaux/photos/Ceratonia%20siliqua%2045-50%20.jpg"
   },
   {
+    "name": "Chorisia speciosa 60-80.jpeg",
+    "path": "photos/Chorisia speciosa 60-80.jpeg",
+    "url": "https://cdn.jsdelivr.net/gh/All83660/bibliotheque-vegetaux/photos/Chorisia%20speciosa%2060-80.jpeg"
+  },
+  {
     "name": "Cinnamomum Camphora 150-200 Cont..jpg",
     "path": "photos/Cinnamomum Camphora 150-200 Cont..jpg",
     "url": "https://cdn.jsdelivr.net/gh/All83660/bibliotheque-vegetaux/photos/Cinnamomum%20Camphora%20150-200%20Cont..jpg"
@@ -160,6 +180,11 @@
     "url": "https://cdn.jsdelivr.net/gh/All83660/bibliotheque-vegetaux/photos/Cinnamomum%20camphora%2045-50%20.jpg"
   },
   {
+    "name": "Citrus aurantium 30-35.jpeg",
+    "path": "photos/Citrus aurantium 30-35.jpeg",
+    "url": "https://cdn.jsdelivr.net/gh/All83660/bibliotheque-vegetaux/photos/Citrus%20aurantium%2030-35.jpeg"
+  },
+  {
     "name": "Citrus maxima 20-25.jpg",
     "path": "photos/Citrus maxima 20-25.jpg",
     "url": "https://cdn.jsdelivr.net/gh/All83660/bibliotheque-vegetaux/photos/Citrus%20maxima%2020-25.jpg"
@@ -178,6 +203,11 @@
     "name": "Cordyline australis 'Torbay Dazzler' 100-125.JPEG",
     "path": "photos/Cordyline australis 'Torbay Dazzler' 100-125.JPEG",
     "url": "https://cdn.jsdelivr.net/gh/All83660/bibliotheque-vegetaux/photos/Cordyline%20australis%20'Torbay%20Dazzler'%20100-125.JPEG"
+  },
+  {
+    "name": "Cordyline australis 4-6 stipe 300-350.jpeg",
+    "path": "photos/Cordyline australis 4-6 stipe 300-350.jpeg",
+    "url": "https://cdn.jsdelivr.net/gh/All83660/bibliotheque-vegetaux/photos/Cordyline%20australis%204-6%20stipe%20300-350.jpeg"
   },
   {
     "name": "Dasylirion longissimum C80.JPEG",
@@ -230,6 +260,16 @@
     "url": "https://cdn.jsdelivr.net/gh/All83660/bibliotheque-vegetaux/photos/Escallonia%20red%20dream%20C10L.jpg"
   },
   {
+    "name": "Eucalyptus gunnii 30-35.jpeg",
+    "path": "photos/Eucalyptus gunnii 30-35.jpeg",
+    "url": "https://cdn.jsdelivr.net/gh/All83660/bibliotheque-vegetaux/photos/Eucalyptus%20gunnii%2030-35.jpeg"
+  },
+  {
+    "name": "Eucalyptus rostrata h  600-700.jpeg",
+    "path": "photos/Eucalyptus rostrata h  600-700.jpeg",
+    "url": "https://cdn.jsdelivr.net/gh/All83660/bibliotheque-vegetaux/photos/Eucalyptus%20rostrata%20h%20%20600-700.jpeg"
+  },
+  {
     "name": "Feijoa sellowiana C10L.jpg",
     "path": "photos/Feijoa sellowiana C10L.jpg",
     "url": "https://cdn.jsdelivr.net/gh/All83660/bibliotheque-vegetaux/photos/Feijoa%20sellowiana%20C10L.jpg"
@@ -243,6 +283,11 @@
     "name": "Ficus carica 20-25 .jpeg",
     "path": "photos/Ficus carica 20-25 .jpeg",
     "url": "https://cdn.jsdelivr.net/gh/All83660/bibliotheque-vegetaux/photos/Ficus%20carica%2020-25%20.jpeg"
+  },
+  {
+    "name": "Ficus nitida 100-120.jpeg",
+    "path": "photos/Ficus nitida 100-120.jpeg",
+    "url": "https://cdn.jsdelivr.net/gh/All83660/bibliotheque-vegetaux/photos/Ficus%20nitida%20100-120.jpeg"
   },
   {
     "name": "Firmiana simplex 30-35.jpg",
@@ -260,14 +305,34 @@
     "url": "https://cdn.jsdelivr.net/gh/All83660/bibliotheque-vegetaux/photos/Gleditsia%20triacanthos%20'Inermis'%20300-350.JPEG"
   },
   {
+    "name": "Grevillea robusta 30-35.jpeg",
+    "path": "photos/Grevillea robusta 30-35.jpeg",
+    "url": "https://cdn.jsdelivr.net/gh/All83660/bibliotheque-vegetaux/photos/Grevillea%20robusta%2030-35.jpeg"
+  },
+  {
+    "name": "Jacaranda mimosifolia 100-120.jpg",
+    "path": "photos/Jacaranda mimosifolia 100-120.jpg",
+    "url": "https://cdn.jsdelivr.net/gh/All83660/bibliotheque-vegetaux/photos/Jacaranda%20mimosifolia%20100-120.jpg"
+  },
+  {
     "name": "Jacaranda mimosifolia 30-35 .jpg",
     "path": "photos/Jacaranda mimosifolia 30-35 .jpg",
     "url": "https://cdn.jsdelivr.net/gh/All83660/bibliotheque-vegetaux/photos/Jacaranda%20mimosifolia%2030-35%20.jpg"
   },
   {
+    "name": "Jacaranda mimosifolia 30-35.jpeg",
+    "path": "photos/Jacaranda mimosifolia 30-35.jpeg",
+    "url": "https://cdn.jsdelivr.net/gh/All83660/bibliotheque-vegetaux/photos/Jacaranda%20mimosifolia%2030-35.jpeg"
+  },
+  {
     "name": "KOELREUTERIA PANICULATA FASTIGIATA 18-20.jpg",
     "path": "photos/KOELREUTERIA PANICULATA FASTIGIATA 18-20.jpg",
     "url": "https://cdn.jsdelivr.net/gh/All83660/bibliotheque-vegetaux/photos/KOELREUTERIA%20PANICULATA%20FASTIGIATA%2018-20.jpg"
+  },
+  {
+    "name": "Koelreuteria paniculata 30-35.jpeg",
+    "path": "photos/Koelreuteria paniculata 30-35.jpeg",
+    "url": "https://cdn.jsdelivr.net/gh/All83660/bibliotheque-vegetaux/photos/Koelreuteria%20paniculata%2030-35.jpeg"
   },
   {
     "name": "Lagerstroemia indica 'Violacea' 300-350.JPEG",
@@ -278,6 +343,16 @@
     "name": "Lagerstroemia indica 'Violacea' 35-40.JPEG",
     "path": "photos/Lagerstroemia indica 'Violacea' 35-40.JPEG",
     "url": "https://cdn.jsdelivr.net/gh/All83660/bibliotheque-vegetaux/photos/Lagerstroemia%20indica%20'Violacea'%2035-40.JPEG"
+  },
+  {
+    "name": "Lagerstroemia indica 30-35.jpeg",
+    "path": "photos/Lagerstroemia indica 30-35.jpeg",
+    "url": "https://cdn.jsdelivr.net/gh/All83660/bibliotheque-vegetaux/photos/Lagerstroemia%20indica%2030-35.jpeg"
+  },
+  {
+    "name": "Lagunaria pattersonii 30-35.jpeg",
+    "path": "photos/Lagunaria pattersonii 30-35.jpeg",
+    "url": "https://cdn.jsdelivr.net/gh/All83660/bibliotheque-vegetaux/photos/Lagunaria%20pattersonii%2030-35.jpeg"
   },
   {
     "name": "Laurus nobilis 200-250.jpg",
@@ -315,6 +390,11 @@
     "url": "https://cdn.jsdelivr.net/gh/All83660/bibliotheque-vegetaux/photos/Ligustrum%20japonais%20variegata%2018-20.jpg"
   },
   {
+    "name": "Liquidambar styraciflua 30-35 2.jpeg",
+    "path": "photos/Liquidambar styraciflua 30-35 2.jpeg",
+    "url": "https://cdn.jsdelivr.net/gh/All83660/bibliotheque-vegetaux/photos/Liquidambar%20styraciflua%2030-35%202.jpeg"
+  },
+  {
     "name": "Liquidambar styraciflua 30-35.jpeg",
     "path": "photos/Liquidambar styraciflua 30-35.jpeg",
     "url": "https://cdn.jsdelivr.net/gh/All83660/bibliotheque-vegetaux/photos/Liquidambar%20styraciflua%2030-35.jpeg"
@@ -323,6 +403,11 @@
     "name": "MAGNOLIA TOREDERA 30-35.jpg",
     "path": "photos/MAGNOLIA TOREDERA 30-35.jpg",
     "url": "https://cdn.jsdelivr.net/gh/All83660/bibliotheque-vegetaux/photos/MAGNOLIA%20TOREDERA%2030-35.jpg"
+  },
+  {
+    "name": "Magnolia grandiflora 30-35.jpeg",
+    "path": "photos/Magnolia grandiflora 30-35.jpeg",
+    "url": "https://cdn.jsdelivr.net/gh/All83660/bibliotheque-vegetaux/photos/Magnolia%20grandiflora%2030-35.jpeg"
   },
   {
     "name": "Mahonia media Charity C10L.jpg",
@@ -338,6 +423,11 @@
     "name": "Melia azedarach 25-30 (1).jpg",
     "path": "photos/Melia azedarach 25-30 (1).jpg",
     "url": "https://cdn.jsdelivr.net/gh/All83660/bibliotheque-vegetaux/photos/Melia%20azedarach%2025-30%20(1).jpg"
+  },
+  {
+    "name": "Melia azedarach 30-35.jpeg",
+    "path": "photos/Melia azedarach 30-35.jpeg",
+    "url": "https://cdn.jsdelivr.net/gh/All83660/bibliotheque-vegetaux/photos/Melia%20azedarach%2030-35.jpeg"
   },
   {
     "name": "Melia azedarach 300-350.JPEG",
@@ -363,6 +453,11 @@
     "name": "Nandina domestica fire power C10L copie.jpg",
     "path": "photos/Nandina domestica fire power C10L copie.jpg",
     "url": "https://cdn.jsdelivr.net/gh/All83660/bibliotheque-vegetaux/photos/Nandina%20domestica%20fire%20power%20C10L%20copie.jpg"
+  },
+  {
+    "name": "Nerium oleander 35-40.jpeg",
+    "path": "photos/Nerium oleander 35-40.jpeg",
+    "url": "https://cdn.jsdelivr.net/gh/All83660/bibliotheque-vegetaux/photos/Nerium%20oleander%2035-40.jpeg"
   },
   {
     "name": "Nerium tige 14-16.jpg",
@@ -410,6 +505,11 @@
     "url": "https://cdn.jsdelivr.net/gh/All83660/bibliotheque-vegetaux/photos/PHOTINEA%20TORDERA%2014-16.jpg"
   },
   {
+    "name": "Parkinsonia aculeata 30-35.jpeg",
+    "path": "photos/Parkinsonia aculeata 30-35.jpeg",
+    "url": "https://cdn.jsdelivr.net/gh/All83660/bibliotheque-vegetaux/photos/Parkinsonia%20aculeata%2030-35.jpeg"
+  },
+  {
     "name": "Paulownia tomentosa 30-35.JPG",
     "path": "photos/Paulownia tomentosa 30-35.JPG",
     "url": "https://cdn.jsdelivr.net/gh/All83660/bibliotheque-vegetaux/photos/Paulownia%20tomentosa%2030-35.JPG"
@@ -428,6 +528,11 @@
     "name": "Phoenix canariensis 6m.jpg",
     "path": "photos/Phoenix canariensis 6m.jpg",
     "url": "https://cdn.jsdelivr.net/gh/All83660/bibliotheque-vegetaux/photos/Phoenix%20canariensis%206m.jpg"
+  },
+  {
+    "name": "Phoenix dactylifera stipe 450-500.jpeg",
+    "path": "photos/Phoenix dactylifera stipe 450-500.jpeg",
+    "url": "https://cdn.jsdelivr.net/gh/All83660/bibliotheque-vegetaux/photos/Phoenix%20dactylifera%20stipe%20450-500.jpeg"
   },
   {
     "name": "Photinia little red robin C10L.jpg",
@@ -498,6 +603,21 @@
     "name": "Prunus dulcis 20-25 .jpeg",
     "path": "photos/Prunus dulcis 20-25 .jpeg",
     "url": "https://cdn.jsdelivr.net/gh/All83660/bibliotheque-vegetaux/photos/Prunus%20dulcis%2020-25%20.jpeg"
+  },
+  {
+    "name": "Prunus serrulata 30-35.jpeg",
+    "path": "photos/Prunus serrulata 30-35.jpeg",
+    "url": "https://cdn.jsdelivr.net/gh/All83660/bibliotheque-vegetaux/photos/Prunus%20serrulata%2030-35.jpeg"
+  },
+  {
+    "name": "Prunus serrulata 50-60.jpeg",
+    "path": "photos/Prunus serrulata 50-60.jpeg",
+    "url": "https://cdn.jsdelivr.net/gh/All83660/bibliotheque-vegetaux/photos/Prunus%20serrulata%2050-60.jpeg"
+  },
+  {
+    "name": "Punica granatum 30-35.jpeg",
+    "path": "photos/Punica granatum 30-35.jpeg",
+    "url": "https://cdn.jsdelivr.net/gh/All83660/bibliotheque-vegetaux/photos/Punica%20granatum%2030-35.jpeg"
   },
   {
     "name": "Pyracantha coccinea 80-100.JPEG",
@@ -585,9 +705,19 @@
     "url": "https://cdn.jsdelivr.net/gh/All83660/bibliotheque-vegetaux/photos/Schinus%20mollis%2030-35.jpg"
   },
   {
+    "name": "Schinus terebinthifolius 30-35.jpeg",
+    "path": "photos/Schinus terebinthifolius 30-35.jpeg",
+    "url": "https://cdn.jsdelivr.net/gh/All83660/bibliotheque-vegetaux/photos/Schinus%20terebinthifolius%2030-35.jpeg"
+  },
+  {
     "name": "Sophora japonica 30-35 .jpg",
     "path": "photos/Sophora japonica 30-35 .jpg",
     "url": "https://cdn.jsdelivr.net/gh/All83660/bibliotheque-vegetaux/photos/Sophora%20japonica%2030-35%20.jpg"
+  },
+  {
+    "name": "Sophora japonica 30-35.jpeg",
+    "path": "photos/Sophora japonica 30-35.jpeg",
+    "url": "https://cdn.jsdelivr.net/gh/All83660/bibliotheque-vegetaux/photos/Sophora%20japonica%2030-35.jpeg"
   },
   {
     "name": "Strelitzia nicolai 200-250.JPEG",
@@ -618,6 +748,21 @@
     "name": "Syagrus romanzoffiana h 600-700.JPEG",
     "path": "photos/Syagrus romanzoffiana h 600-700.JPEG",
     "url": "https://cdn.jsdelivr.net/gh/All83660/bibliotheque-vegetaux/photos/Syagrus%20romanzoffiana%20h%20600-700.JPEG"
+  },
+  {
+    "name": "Syagrus romanzoffiana stipe 450-500.jpeg",
+    "path": "photos/Syagrus romanzoffiana stipe 450-500.jpeg",
+    "url": "https://cdn.jsdelivr.net/gh/All83660/bibliotheque-vegetaux/photos/Syagrus%20romanzoffiana%20stipe%20450-500.jpeg"
+  },
+  {
+    "name": "Tamarix gallica 30-35.jpeg",
+    "path": "photos/Tamarix gallica 30-35.jpeg",
+    "url": "https://cdn.jsdelivr.net/gh/All83660/bibliotheque-vegetaux/photos/Tamarix%20gallica%2030-35.jpeg"
+  },
+  {
+    "name": "Tamarix pentandra 30-35.jpeg",
+    "path": "photos/Tamarix pentandra 30-35.jpeg",
+    "url": "https://cdn.jsdelivr.net/gh/All83660/bibliotheque-vegetaux/photos/Tamarix%20pentandra%2030-35.jpeg"
   },
   {
     "name": "Thuya esmeralda C10L.jpg",
@@ -690,9 +835,29 @@
     "url": "https://cdn.jsdelivr.net/gh/All83660/bibliotheque-vegetaux/photos/Viburnum%20tinus%20C30L.jpg"
   },
   {
+    "name": "Vitis vinifera 'Isabella Bianca' 14-16.jpeg",
+    "path": "photos/Vitis vinifera 'Isabella Bianca' 14-16.jpeg",
+    "url": "https://cdn.jsdelivr.net/gh/All83660/bibliotheque-vegetaux/photos/Vitis%20vinifera%20'Isabella%20Bianca'%2014-16.jpeg"
+  },
+  {
     "name": "Wash. Robusta 6.00 m tronc .jpeg",
     "path": "photos/Wash. Robusta 6.00 m tronc .jpeg",
     "url": "https://cdn.jsdelivr.net/gh/All83660/bibliotheque-vegetaux/photos/Wash.%20Robusta%206.00%20m%20tronc%20.jpeg"
+  },
+  {
+    "name": "Washingtonia filifera stipe 350-400.jpeg",
+    "path": "photos/Washingtonia filifera stipe 350-400.jpeg",
+    "url": "https://cdn.jsdelivr.net/gh/All83660/bibliotheque-vegetaux/photos/Washingtonia%20filifera%20stipe%20350-400.jpeg"
+  },
+  {
+    "name": "Washingtonia filifera stipe 450-500.jpeg",
+    "path": "photos/Washingtonia filifera stipe 450-500.jpeg",
+    "url": "https://cdn.jsdelivr.net/gh/All83660/bibliotheque-vegetaux/photos/Washingtonia%20filifera%20stipe%20450-500.jpeg"
+  },
+  {
+    "name": "Washingtonia filifera stipe 600-700.jpeg",
+    "path": "photos/Washingtonia filifera stipe 600-700.jpeg",
+    "url": "https://cdn.jsdelivr.net/gh/All83660/bibliotheque-vegetaux/photos/Washingtonia%20filifera%20stipe%20600-700.jpeg"
   },
   {
     "name": "Xanthorrea glauca st 100.JPEG",
@@ -763,6 +928,11 @@
     "name": "aesculus carea 20-25.jpg",
     "path": "photos/aesculus carea 20-25.jpg",
     "url": "https://cdn.jsdelivr.net/gh/All83660/bibliotheque-vegetaux/photos/aesculus%20carea%2020-25.jpg"
+  },
+  {
+    "name": "albizia julibrissin 30-35.jpeg",
+    "path": "photos/albizia julibrissin 30-35.jpeg",
+    "url": "https://cdn.jsdelivr.net/gh/All83660/bibliotheque-vegetaux/photos/albizia%20julibrissin%2030-35.jpeg"
   },
   {
     "name": "albizia ombrella 18-20.jpg",
