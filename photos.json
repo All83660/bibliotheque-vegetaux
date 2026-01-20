@@ -145,6 +145,11 @@
     "url": "https://cdn.jsdelivr.net/gh/All83660/bibliotheque-vegetaux/photos/Brachychiton%20acerifolius%2050-60.jpeg"
   },
   {
+    "name": "Brachychiton acerifolius v.50 circ.30-35.jpg",
+    "path": "photos/Brachychiton acerifolius v.50 circ.30-35.jpg",
+    "url": "https://cdn.jsdelivr.net/gh/All83660/bibliotheque-vegetaux/photos/Brachychiton%20acerifolius%20v.50%20circ.30-35.jpg"
+  },
+  {
     "name": "Brachychiton populneus 18-25.JPEG",
     "path": "photos/Brachychiton populneus 18-25.JPEG",
     "url": "https://cdn.jsdelivr.net/gh/All83660/bibliotheque-vegetaux/photos/Brachychiton%20populneus%2018-25.JPEG"
@@ -448,6 +453,11 @@
     "name": "Ficus nitida 100-120.jpeg",
     "path": "photos/Ficus nitida 100-120.jpeg",
     "url": "https://cdn.jsdelivr.net/gh/All83660/bibliotheque-vegetaux/photos/Ficus%20nitida%20100-120.jpeg"
+  },
+  {
+    "name": "Ficus rubiginosa 30-35.jpeg",
+    "path": "photos/Ficus rubiginosa 30-35.jpeg",
+    "url": "https://cdn.jsdelivr.net/gh/All83660/bibliotheque-vegetaux/photos/Ficus%20rubiginosa%2030-35.jpeg"
   },
   {
     "name": "Firmiana simplex 30-35.jpg",
@@ -1228,6 +1238,11 @@
     "name": "Tillia tomentosa 40-45.JPG",
     "path": "photos/Tillia tomentosa 40-45.JPG",
     "url": "https://cdn.jsdelivr.net/gh/All83660/bibliotheque-vegetaux/photos/Tillia%20tomentosa%2040-45.JPG"
+  },
+  {
+    "name": "Tipuana tipu 30-35.jpeg",
+    "path": "photos/Tipuana tipu 30-35.jpeg",
+    "url": "https://cdn.jsdelivr.net/gh/All83660/bibliotheque-vegetaux/photos/Tipuana%20tipu%2030-35.jpeg"
   },
   {
     "name": "ULMUS.RESISTA 18-20.jpg",
